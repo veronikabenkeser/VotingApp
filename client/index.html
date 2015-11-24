@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head
+        <meta charset = "UTF-8">
+        <title>Workflow!</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <nav class ="navbar navbar-inverse">
+            <div class ="container-fluid">
+                <div class = "navbar-header">
+                    <button type = "button" class ="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                        <span class="icon-bar"></span>
+                         <span class="icon-bar"></span>
+                          <span class="icon-bar"></span>
+                    </button>
+                    <a class = "navbar-brand" href="#">My App</a>
+                </div>
+                <div class="collapse navbar-collapse" id="myNavbar">
+                    <ul class = "nav navbar-nav">
+                        <li class = "home"><a href = "#home">Home</a></li>
+                    </ul>
+                    
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div id ="description"> Polls Live</div>
+        
+        <div class = "container">
+            <div class = "row-fluid">
+                <ul id ="poll-list"></ul>
+            </div>
+            
+            
+             <h1>Create a new POll!</h1>
+             <div id ="polls">
+                 <form id="addPoll" action ="#">
+                     <div>
+            <label for="name">name of the poll: </label><input id="name" placeholder="Name of the poll" type="text" autofocus />
+     <label for="option1">Option1: </label><input id="option1" type="text" />
+            <label for="option2">Option2: </label><input id="option2" type="text" />
+             <button id="add">Add</button>
+            </div>
+        </form>
+       </div>
+            <footer class = "footer">
+                <p>Footer</p>
+               
+            </footer>
+        </div>
+    <!--CSS --> 
+    <link rel="stylesheet" href = "libs/bootstrap/dist/css/bootstrap.min.css">
+  
+    <script data-main="app" src ="libs/requirejs/require.js"></script>
+    <script  src="libs/bootstrap/dist/js/bootstrap.min.js"></script>
+ </body>
+
+</html>

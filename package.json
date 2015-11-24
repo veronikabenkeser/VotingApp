@@ -1,0 +1,23 @@
+{
+  "name": "VotingApp",
+  "version": "0.0.0",
+  "description": "Basejump 1 for FreeCodeCamp",
+  "main": "server.js",
+  "repository": "",
+  "author": "Veronika Benkeser <veronika.benkeser@gmail.com>",
+  "dependencies": {
+    "async": "~0.2.8",
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.14.1",
+    "bower": "^1.6.5",
+    "express": "^4.13.3",
+    "jsonwebtoken": "^5.4.1",
+    "mongoose": "^4.2.6",
+    "morgan": "^1.6.1",
+    "nodemon": "^1.8.1",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "require": "^2.4.20",
+    "requirejs": "^2.1.22"
+  }
+}

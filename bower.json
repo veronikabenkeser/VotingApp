@@ -1,0 +1,19 @@
+{
+  "name": "workspace",
+  "version": "0.0.0",
+  "authors": [
+    "Veronika Benkeser <veronika.benkeser@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "homepage": "",
+  "dependencies": {
+    "bootstrap": "~3.3.5",
+    "backbone": "~1.2.3",
+    "backbone.marionette": "marionette#~2.4.4",
+    "requirejs": "~2.1.22",
+    "text": "requirejs/text#~2.0.14"
+  }
+}
