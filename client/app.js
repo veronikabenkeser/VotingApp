@@ -15,8 +15,17 @@ require.config({
     }
 });
 
-require(['jquery','underscore','backbone','src/views/polls'],function($,_,Backbone,PollsView){
+// require(['jquery','underscore','backbone','src/views/polls'],function($,_,Backbone,PollsView){
+//     $(function(){
+//         new PollsView();
+      
+//     });
+// });
+
+require(['jquery','underscore','backbone','router'],function($,_,Backbone,AppRouter){
     $(function(){
-        new PollsView();
+        
+        new AppRouter();
+      Backbone.history.start({pushState:true});
     });
 });

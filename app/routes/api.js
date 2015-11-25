@@ -69,7 +69,16 @@ apiRouter.route('/polls/:poll_id')
          }
          }
      });
-   });
+//   });
+})
+.delete(function(req, res) {
+          Poll.remove({
+            _id: req.params.poll_id
+          }, function(err, poll){
+            if(err) return res.send(err);
+            res.json({message: 'This poll has been successfully deleted.'});
+          });
+      });  
    
     
     //Get all users and create a new account
@@ -277,16 +286,16 @@ apiRouter.route('/mypolls')
               res.json(poll);
               });
               
-          })
-      
-      .delete(function(req, res) {
-          Poll.remove({
-            _id: req.params.poll_id
-          }, function(err, poll){
-            if(err) return res.send(err);
-            res.json({message: 'This poll has been successfully deleted.'});
           });
-      });  
+      
+    //   .delete(function(req, res) {
+    //       Poll.remove({
+    //         _id: req.params.poll_id
+    //       }, function(err, poll){
+    //         if(err) return res.send(err);
+    //         res.json({message: 'This poll has been successfully deleted.'});
+    //       });
+    //   });  
 
 apiRouter.get('/me',function(req, res) {
   //autherization token stored in req.decoded

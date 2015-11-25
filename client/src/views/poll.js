@@ -11,16 +11,26 @@ define(['jquery',
     events:{
         'click .delete':'deletePoll'
     },
+    initialize:function(){
+       this.render();
+    },
     deletePoll: function(){
      //Delete model
-     this.model.destroy();
-     //Delete view
+     this.model.destroy({
+         success: function(){
+             
+             alert("Poll deleted successfully");
+             //Delete view
      this.remove();
+            //  window.history.back();
+            
+         }
+     });
+     
     },
      render: function() {
         //this.el is what we defined in tagName
-        this.$el.html( this.template( this.model.attributes ) );
-
+        this.$el.html( this.template( this.model.toJSON()) );
         return this;
     }
 });

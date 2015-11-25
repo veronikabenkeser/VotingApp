@@ -1,5 +1,6 @@
 define(['underscore','backbone'],function(_,Backbone){
     var Poll = Backbone.Model.extend({
+        urlRoot:"/api/polls",
     idAttribute: '_id',
     defaults:{
         name:'No name',
