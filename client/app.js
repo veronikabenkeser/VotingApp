@@ -5,15 +5,15 @@ require.config({
         'jquery':'libs/jquery/dist/jquery',
         'underscore':'libs/underscore/underscore',
         'backbone':'libs/backbone/backbone',
-        'text': 'libs/text/text',
-        'backboneValidation':'libs/backbone.validation/dist/backbone-validation'
+        'text': 'libs/text/text'
+        // 'backbone-validation':'libs/backbone.validation/dist/backbone-validation'
         // 'bootstrap': "libs/bootstrap/dist/css/bootstrap.min"
         
     },
     shim:{
         'underscore': {
             exports: '_' //This line tells RequireJS that the script in 'lib/underscore.js' creates a global variable called _ instead of defining a module. 
-        },
+        }
         // backbone: {
         //     //These script dependencies should be loaded before loading backbone.js
         //     deps: ['underscore', 'jquery'],
@@ -21,12 +21,21 @@ require.config({
         //     exports: 'Backbone'
         // },
         // 'bootstrap': {"deps":['jquery']}
-        'backboneValidation':{
-            "deps": ['backbone']
-        }
+        // 'backbone-validation':{"deps":['backbone']}
+        // 'backbone':{
+        //     "deps": [ "underscore", "jquery" ],
+        //      "exports": "Backbone"
+        // },
+        // 'backbone.validateAll': {
+        //     "deps": ["backbone"]
+        // }
+       
     }
-    
-    
+    // map:{
+    //     '*': {
+    //         'backbone':'backbone.validateAll'
+    //     }
+    // }
 });
 
 // require(['jquery','underscore','backbone','src/views/polls'],function($,_,Backbone,PollsView){
