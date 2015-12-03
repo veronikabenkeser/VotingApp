@@ -24,16 +24,16 @@ module.exports = function(app,express){
        poll.option1 = req.body.option1;
        poll.option2 = req.body.option2;
        
-        //save the user and check for errors
-     poll.save(function(err){
+        //save the poll and check for errors
+     poll.save(function(err,data){
        if (err) {
          //duplicate entry
         
            return res.json({success: false, message : 'Poll was not saved.'});
        }
         
-       
-       res.json({message: 'New poll created!'});
+       res.json(data);
+    //   res.json({message: 'New poll created!'});
      });
    });
   
@@ -163,6 +163,8 @@ apiRouter.post('/authenticate',function(req,res){
 //Since the pathh is omitted here. the path is "/" by default. This middleware will
 //be fired every time the user is at ../api..
 //Users are required to have a token to access apiRouter's endpoints(/api/...)
+//-- api USer tOKEN
+
 apiRouter.use(function(req,res,next){
   //Check post params,url params,  or header params for token
   
@@ -173,10 +175,10 @@ apiRouter.use(function(req,res,next){
   
   //POSTparams are params from forms,which  pass information as application/x-www-form-urlencoded.
    //POST Parameters are grabbed using req.body.variable_name
-  var token=req.body.token||req.query.token||req.headers['x-access-token'];
+var token=req.body.token||req.query.token||req.headers['x-access-token'];
   
   //decode token
-  if(token){
+if(token || !token){
     //verifies secret and checks token's expiration
     jwt.verify(token, superSecret, function(err,decoded){
       if(err){
@@ -194,7 +196,7 @@ apiRouter.use(function(req,res,next){
   } else {
     //if there is no tocken
     //return an HTTP response of 403 (access forbidden) and an error message
-    return res.status(403).send({
+   return res.status(403).send({
       success: false,
       message: 'No token provided'
     });

@@ -1,18 +1,32 @@
 // Entry point to the app. Configuring how RequireJS loads the rest of the app 
 require.config({
-    // baseUrl:"src",
+    // baseUrl:"client",
     paths:{
         'jquery':'libs/jquery/dist/jquery',
         'underscore':'libs/underscore/underscore',
         'backbone':'libs/backbone/backbone',
-        'text': 'libs/text/text'
+        'text': 'libs/text/text',
+        'backboneValidation':'libs/backbone.validation/dist/backbone-validation'
+        // 'bootstrap': "libs/bootstrap/dist/css/bootstrap.min"
         
     },
     shim:{
         'underscore': {
             exports: '_' //This line tells RequireJS that the script in 'lib/underscore.js' creates a global variable called _ instead of defining a module. 
+        },
+        // backbone: {
+        //     //These script dependencies should be loaded before loading backbone.js
+        //     deps: ['underscore', 'jquery'],
+        //     //Once loaded, use the global 'Backbone' as the module value.
+        //     exports: 'Backbone'
+        // },
+        // 'bootstrap': {"deps":['jquery']}
+        'backboneValidation':{
+            "deps": ['backbone']
         }
     }
+    
+    
 });
 
 // require(['jquery','underscore','backbone','src/views/polls'],function($,_,Backbone,PollsView){
@@ -24,8 +38,8 @@ require.config({
 
 require(['jquery','underscore','backbone','router'],function($,_,Backbone,AppRouter){
     $(function(){
-        
-        new AppRouter();
+      myRouter = new AppRouter();
       Backbone.history.start({pushState:true});
+   
     });
 });

@@ -18,12 +18,12 @@
                 </div>
                 <div class="collapse navbar-collapse" id="myNavbar">
                     <ul class = "nav navbar-nav">
-                        <li class = "home"><a href = "#home">Home</a></li>
+                        <li class = "home"><a href = "home">Home</a></li>
                     </ul>
                     
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                        <li><a href="signup"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+        <li><a href="login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
                     </ul>
                 </div>
             </div>
@@ -31,13 +31,18 @@
         <div id ="description"> Polls Live</div>
         
         <div class = "container">
+            
+            <div id = 'content'>
+                
+            </div>
             <div class = "row-fluid">
                 <ul id ="poll-list"></ul>
             </div>
             
             
              <h1>This is the polls div!</h1>
-             <h2 action = "#polls/add">Add Poll</h2>
+             <!--<h2 action = "#polls/add">Add Poll</h2>-->
+             <a href="#polls/add">Add Poll</a>
              <div id ="polls">
                 
        </div>
@@ -47,10 +52,11 @@
             </footer>
         </div>
     <!--CSS --> 
-    <link rel="stylesheet" href = "libs/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href = "/libs/bootstrap/dist/css/bootstrap.min.css">
   
-    <script data-main="app" src ="libs/requirejs/require.js"></script>
-    <script  src="libs/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script data-main="/app" src ="/libs/requirejs/require.js"></script>
+   
  </body>
 
 </html>

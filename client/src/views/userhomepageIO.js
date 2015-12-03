@@ -7,6 +7,7 @@ define(['jquery',
     tagname:'div',
      className: 'pollContainer',
     // template:_.template($('#pollTemplate').html()),
+     
     template: _.template(newpollTemplate),
     events:{
         'click .add':'addPoll'
@@ -16,7 +17,20 @@ define(['jquery',
     this.model.on('change',this.render,this);
     },
     addPoll: function(){
-     this.model.save();
+        var self=this;
+        console.log("ADD button clicked. adding poll");
+     this.model.save(null,{
+          success: function(model){
+             self.render();
+             
+             console.log("Poll added successfully");
+            // var pollView = new PollView({model: model});
+             appRouter.navigate('polls/'+model.id,false);
+          },
+          error: function(){
+              alert('This poll has not been saved.');
+          }
+     });
     },
      render: function() {
         //this.el is what we defined in tagName

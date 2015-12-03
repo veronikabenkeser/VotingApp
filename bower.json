@@ -14,6 +14,7 @@
     "backbone": "~1.2.3",
     "backbone.marionette": "marionette#~2.4.4",
     "requirejs": "~2.1.22",
-    "text": "requirejs/text#~2.0.14"
+    "text": "requirejs/text#~2.0.14",
+    "backbone.validation": "backbone-validation#~0.11.5"
   }
 }

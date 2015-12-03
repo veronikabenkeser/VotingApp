@@ -76,10 +76,11 @@ app.use('/api',apiRoutes);
 //After the user has been authenticated, send him to this frontend
 //Main catchall route
 //For all other routes (*), we will send the user to our frontend application where Angular can handle routing them from there.
-// app.get('*',function(req,res){ //going to the link itself https://try4-autumncat.c9users.io
-//   // res.sendFile();
-//   console.log("this is happening.");
-// });
+app.get('*',function(req,res){ //going to the link itself https://try4-autumncat.c9users.io
+
+  res.sendFile(path.join(__dirname+'/client/index.html'));
+  console.log("this is happening.");
+});
 
 // app.get('/',function(req,res){ //going to the link itself https://try4-autumncat.c9users.io
 //   // res.sendFile();
