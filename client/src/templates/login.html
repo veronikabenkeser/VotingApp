@@ -1,8 +1,18 @@
-   <form id="login-form">             
-                     <div>
-            <label for="email">Email </label><input id="email" type="text" value ="<%= email %>" autofocus />
-     <label for="password">Option1: </label><input id="password" type="text" value = "<%= password %>"/>
-           
-             <button class="add">Add!!</button>
-            </div>
-        </form>
+ <form id="signup-form">
+
+  <div class="form-group">
+    <label for="email">Email </label>
+    <input id="email" type="text" class="form-control" placeholder="Email" value="<%= email %>" />
+    <div class="help"></div>
+  </div>
+  
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input id="password" type="password" placeholder="Password" class="form-control" value="<%= password %>" />
+    <div class="help"></div>
+  </div>
+
+  <button class="login btn btn-default">Log in</button>
+
+  </div>
+</form>

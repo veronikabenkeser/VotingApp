@@ -10,14 +10,20 @@ define(['jquery',
         tagname:'div',
         className: 'signup-container',
         template: _.template(SignupTemplate),
+        initialize: function(){
+          this.listenTo(this.model, 'invalid', this.onModelInvalid);
+        //   this.listenTo(this.model, 'change',this.validate0);
+        },
         events:{
             // 'change input[type!="submit"]': 'validate0',
             // // 'change': 'validate0',
             'click .signup':'registerUser',
-            'change input': 'onInputChange',
+            
             // 'keyup input':'onInputChange'
             // 'change':'onInputChange'
+            'change input': 'onInputChange',
             'keyup input':'realTimeOnInputChange'
+            
             
         },
         onInputChange:function(e){
@@ -36,11 +42,18 @@ define(['jquery',
             tempObj[fieldName]=fieldValue;
             var errors = this.model.validate(tempObj);
             console.log("errors is "+errors);
-            if(!_.isEmpty(errors)){
-                console.log('error obj is not empty');
+            // if(!_.isEmpty(errors)){
+            //     console.log('error obj is not empty');
+            //     this.showErrors(errors);
+            // }else{
+            //     console.log("error obj is empty");
+            //     this.removeValidationErr(fieldName);
+            // }
+            if(errors !== undefined ){//errors were returned
+              console.log('error obj is not empty');
                 this.showErrors(errors);
-            }else{
-                console.log("error obj is empty");
+            } else {
+                 console.log("error obj is empty");
                 this.removeValidationErr(fieldName);
             }
         },
@@ -68,11 +81,11 @@ define(['jquery',
             $('#'+fieldName).parent().removeClass('error');
            $('#'+fieldName).next().html('');
        },
-        initialize: function(){
-          var user = new User();  
-          this.listenTo(this.model, 'invalid', this.onModelInvalid);
-        //   this.listenTo(this.model, 'change',this.validate0);
-        },
+        // initialize: function(){
+          
+        //   this.listenTo(this.model, 'invalid', this.onModelInvalid);
+        // //   this.listenTo(this.model, 'change',this.validate0);
+        // },
         // initialize: function(){
         //     var myModel = new User();
         //      Backbone.Validation.bind(this, {
@@ -102,11 +115,13 @@ define(['jquery',
     var self = this;
       $('#signup-form div').children('input').each(function(index,elem){
         //   if($(elem).val() !=''){
+       
+       
         console.log("ELEM(id ) "+ elem.id);
              
               console.log("ELEM(VAL ) "+ $(elem).val());
             //   formData[elem.id] = $(elem).val();
-             self.set(elem.id, $(elem).val());
+             self.model.set(elem.id, $(elem).val());
         //   }
       });
       
@@ -124,6 +139,8 @@ define(['jquery',
             //check whether this username already exists in the database
             
             //if not, save the user in the database and login the user into the site
+            
+            //automatically validating according to the model beofre save
             this.model.save(null,{
           wait: true,//don't update the client side model until the server side trip is successful
           success: function(model){//will occur when the server successfully returns a response
@@ -174,7 +191,9 @@ define(['jquery',
     
         },
         onModelInvalid: function(model, errors){
-            console.log("MODEL IS INvALID");
+            console.log("This model has not been saved since it is invalid");
+            console.log(errors);
+            console.log(errors.keys());
         }
     });
     

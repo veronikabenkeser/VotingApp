@@ -7,8 +7,9 @@ define(['backbone',
 'src/views/Aaddpoll',
 'src/models/poll',
 'src/models/user',
-'src/views/signup'],
-function(Backbone, Polls,PollsView, PollView, HomeView, AddPollView, Poll, User, SignupView){
+'src/views/signup',
+'src/views/login'],
+function(Backbone, Polls,PollsView, PollView, HomeView, AddPollView, Poll, User, SignupView, LoginView){
     var AppRouter = Backbone.Router.extend({
         initialize:function(){
              // setup the ajax links for the html5 push navigation
@@ -71,6 +72,9 @@ function(Backbone, Polls,PollsView, PollView, HomeView, AddPollView, Poll, User,
         },
         showLogin: function(){
             console.log('showing login in');
+            var user = new User();
+            var loginView = new LoginView({model:user});
+            $("#content").html(loginView.render().el);
         },
         showSignup: function(){
              console.log('showing signup');

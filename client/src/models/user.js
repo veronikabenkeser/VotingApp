@@ -98,7 +98,8 @@ define(['underscore','backbone'],function(_,Backbone){
           }
          
         //  return (_.isEmpty(errors))?errors:false;
-        return errors;
+        if(!_.isEmpty(errors))return errors;
+        // return errors;
    }
           
   

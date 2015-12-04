@@ -97,15 +97,16 @@ apiRouter.route('/users')
      
      //set the users info(comes from the req)
      user.name = req.body.name;
-     user.username = req.body.username;
+     user.email = req.body.email;
      user.password = req.body.password;
      
      //save the user and check for errors
      user.save(function(err){
        if (err) {
          //duplicate entry
-         if(err.code == 11000){
-           return res.json({success: false, message : 'A user with that user name already exists.'});
+         if(err.code === 11000){
+               return res.json(err);
+        //   return res.json({success: false, message : 'A user with that user name already exists.'});
          } else {
            return res.send(err);
          }
@@ -118,20 +119,20 @@ apiRouter.route('/users')
     //Authenticating Users
 apiRouter.post('/authenticate',function(req,res){
   //find the user
-  //select the name,username, and password explicitly
+  //select the name,email, and password explicitly
   User.findOne({
-    username: req.body.username
-  }).select('name username password').exec(function(err,user){
+    email: req.body.email
+  }).select('name email password').exec(function(err,user){
     if(err)throw err;
     
-    //no user with that username found
+    //no user with that email found
     if(!user){
       res.json({
         success: false,
         message:'Authentication failed. User not found.'
       });
     } else {
-      //if username is found, check if the password matches
+      //if email is found, check if the password matches
       var validPassword = user.comparePassword(req.body.password);
       if(!validPassword){
         res.json({
@@ -143,7 +144,7 @@ apiRouter.post('/authenticate',function(req,res){
         var token = jwt.sign({
           //payload - info we want to transmit back to the website every time the user visits
           name: user.name,
-          username: user.name
+          email: user.email
           //The secret is the signature held by the server.
         }, superSecret, {
           expiresInMinutes: 1440
@@ -224,7 +225,7 @@ apiRouter.route('/users/:user_id')
      User.findById(req.params.user_id,function(err, user) {
          if(err) return res.send(err);
          if(req.body.name) user.name=req.body.name;
-         if(req.body.username) user.username= req.body.username;
+         if(req.body.email) user.email= req.body.email;
          if(req.body.password) user.password = req.body.password;
          
          //save the changes!

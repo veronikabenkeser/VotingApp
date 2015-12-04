@@ -6,7 +6,8 @@ var UserSchema = new Schema({
     name: String,
     email: {type: String, required : true, index: {unique: true}},
     password: {type:String, required: true, select: false}
-    //By setting select to false , the password will not be returned when listing 
+ 
+//     //By setting select to false , the password will not be returned when listing 
     //our users, unless it is explicitly called.
    
 });
@@ -15,7 +16,7 @@ UserSchema.pre('save',function(next){
     var user = this;
     
     if(!user.isModified('password'))return next();
-    
+    console.log("hashing password before saving it in the database");
     bcrypt.hash(user.password, null,null, function(err,hash){
         if (err) return next(err);
        
