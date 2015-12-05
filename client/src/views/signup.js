@@ -2,13 +2,14 @@ define(['jquery',
 'underscore',
 'src/models/user',
 'text!src/templates/signup.html',
-'backbone'
+'backbone',
 // 'backbone-validation',
-
-], function($,_, User,SignupTemplate,Backbone){
+'eventBus'
+], function($,_, User,SignupTemplate,Backbone,EventBus){
     var SignupView = Backbone.View.extend({
-        tagname:'div',
-        className: 'signup-container',
+        // tagname:'div',
+        el:"#content",
+        // className: 'signup-container',
         template: _.template(SignupTemplate),
         initialize: function(){
           this.listenTo(this.model, 'invalid', this.onModelInvalid);
@@ -27,14 +28,9 @@ define(['jquery',
             
         },
         onInputChange:function(e){
-            console.log("onInputchange");
-            console.log(e.target.id);
-             console.log(e.target.value);
-             
-             var fieldName=e.target.id;
-             var fieldValue=e.target.value;
+            var fieldName=e.target.id;
+            var fieldValue=e.target.value;
             this.model.set(fieldName, fieldValue);
-            console.log("BL"+this.model.get(fieldName));
             
             // var result = this.model.validateOne(e.target.id, e.target.value);
             //bcakbone validation on set
@@ -151,6 +147,7 @@ define(['jquery',
               console.log(model);
                console.log(model.id);
             //  myRouter.navigate('polls/'+model.id, {trigger:true});
+            EventBus.trigger('router:navigate',{route: '', options: {trigger:true}});
           },
           error: function(model,error){
               console.log(model.toJSON());
@@ -171,8 +168,6 @@ define(['jquery',
              e.preventDefault();
              var fieldName = e.target.id;
         var fieldValue = e.target.value;
-        console.log("NAME "+ fieldName);
-        console.log('this model '+this.model.keys());
         //     console.log("change to model detected automatically");
         // this.model.set(fieldName,fieldValue);
             this.model.set({"password":"v"},{validate:true, validateAll:false});

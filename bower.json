@@ -14,6 +14,12 @@
     "backbone": "~1.2.3",
     "backbone.marionette": "marionette#~2.4.4",
     "requirejs": "~2.1.22",
-    "text": "requirejs/text#~2.0.14"
-  }
+    "text": "requirejs/text#~2.0.14",
+    "font-awesome": "~4.5.0"
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ]
 }

@@ -12,7 +12,7 @@ module.exports = function(app,express){
    apiRouter.route('/polls')
    .get(function(req,res){
      Poll.find(function(err,polls){
-       if(err) res.send(err);
+       if(err) return res.send(err);
        
        //return all of the polls
        res.json(polls);
@@ -100,7 +100,7 @@ apiRouter.route('/users')
      user.email = req.body.email;
      user.password = req.body.password;
      
-     //save the user and check for errors
+     //save the user to the database and check for errors
      user.save(function(err){
        if (err) {
          //duplicate entry
@@ -118,6 +118,7 @@ apiRouter.route('/users')
    
     //Authenticating Users
 apiRouter.post('/authenticate',function(req,res){
+// apiRouter.post('/login',function(req,res){
   //find the user
   //select the name,email, and password explicitly
   User.findOne({
@@ -144,7 +145,8 @@ apiRouter.post('/authenticate',function(req,res){
         var token = jwt.sign({
           //payload - info we want to transmit back to the website every time the user visits
           name: user.name,
-          email: user.email
+          email: user.email,
+           _id: user._id
           //The secret is the signature held by the server.
         }, superSecret, {
           expiresInMinutes: 1440
@@ -153,7 +155,8 @@ apiRouter.post('/authenticate',function(req,res){
         res.json({
           success: true,
           message : 'Enjoy your token!',
-          token: token
+          token: token,
+          _id: user._id
         });
       }
     }
@@ -204,9 +207,9 @@ if(token || !token){
   }
 });
 
-apiRouter.get('/',function(req,res){
-  res.json({message: 'hooray! welcome to our api, '+req.params.name});
-});
+// apiRouter.get('/',function(req,res){
+//   res.json({message: 'hooray! welcome to our api, '+req.params.name});
+// });
 
 
 
@@ -221,6 +224,7 @@ apiRouter.route('/users/:user_id')
       res.json(user);
      });
    })
+   //update user
    .put(function(req,res){
      User.findById(req.params.user_id,function(err, user) {
          if(err) return res.send(err);

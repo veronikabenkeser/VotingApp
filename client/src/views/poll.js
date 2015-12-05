@@ -16,21 +16,27 @@ define(['jquery',
     },
     deletePoll: function(){
      //Delete model
-     this.model.destroy({
-         success: function(){
-             
-             alert("Poll deleted successfully");
-             //Delete view
-     this.remove();
-            //  window.history.back();
-            
-         }
+     var self=this;
+     this.model.destroy().done(function(){//model is automatically removed from the collection
+         self.remove();////Delete view or self.render() to redraw
      });
+     
+    //  this.model.destroy({ //model is automatically removed from the collection
+    //      success: function(){
+             
+    //          console.log("Poll deleted successfully");
+    //          //Delete view
+    //  self.remove();
+    //         // //  window.history.back();
+            
+    //      }
+    //  });
      
     },
      render: function() {
         //this.el is what we defined in tagName
         this.$el.html( this.template( this.model.toJSON()) );
+        
         return this;
     }
 });

@@ -45,10 +45,60 @@ require.config({
 //     });
 // });
 
-require(['jquery','underscore','backbone','router'],function($,_,Backbone,AppRouter){
+require(['jquery','underscore','backbone','router','eventBus','globals'],function($,_,Backbone,AppRouter,EventBus,globals){
     $(function(){
-      myRouter = new AppRouter();
+        //To prevent memory leaks when views are changed/closed
+      _.extend(Backbone.View.prototype,{
+          //Handle cleanup of view
+          close: function(){
+              if(this.beforeClose){
+                  //Perform any cleanup specific to this view.
+                  this.beforeClose();
+              }
+              
+              if(this.model){//if the view has a model associated with it
+                  //Remove all callbacks for this view's model.
+                  this.model.off(null,null,this);
+                  this.model =null;
+              }
+              
+              //if the view has a collection associated with it and the 
+              //collection has an off method
+              if(this.collection && this.collection.off){
+                  //Remove all callback for this view's collection.
+                  this.collection.off(null,null,this);
+                  this.collection = null;
+              }
+              
+              //Remove all delegated events
+              this.undelegateEvents();
+              this.off(null,null,this);//turn off view's events
+              
+              //Remove all markup.
+              this.$el.empty();
+          }
+      });   
+      //Global change to ajax handling
+      //Any ajax call that gest a 401 error will get trapped and
+      // the user will be taken to the login page
+      $.ajaxSetup({
+          statusCode: {
+              401: function(context){
+                  console.log("ajax handler inside of app.js - 401 Error Received");
+                   EventBus.trigger('router:navigate',{route:'login',options:{trigger:true}});
+                  
+              }
+          },
+          //if the user got a token,
+          //include the token in the header of all 
+          //of the AJAX calls.
+          beforeSend: function(xhr){
+              var token = window.localStorage.getItem(globals.auth.TOKEN_KEY);
+              xhr.setRequestHeader('x-access-token',token);
+          }
+      });
+         
+      var router = new AppRouter();
       Backbone.history.start({pushState:true});
-   
     });
 });
