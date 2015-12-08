@@ -92,6 +92,17 @@ require(['jquery', 'underscore', 'backbone', 'router', 'eventBus', 'globals', 'a
                         }
                     });
 
+                },
+                //when token has expired
+                403: function(context){
+                    console.log('your token has expired');
+                     EventBus.trigger("app:logout");
+                    EventBus.trigger('router:navigate', {
+                        route: 'login',
+                        options:{
+                            trigger:true
+                        }
+                    });
                 }
             },
             //if the user got a token,

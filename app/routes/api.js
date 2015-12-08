@@ -8,7 +8,6 @@ var superSecret = config.secret;
 module.exports = function(app, express) {
     var apiRouter = express.Router();
 
-
     apiRouter.route('/polls')
         .get(function(req, res) {
             Poll.find(function(err, polls) {
@@ -164,7 +163,8 @@ module.exports = function(app, express) {
                         _id: user._id
                             //The secret is the signature held by the server.
                     }, superSecret, {
-                        expiresIn: 1440
+                        // expiresIn: 1440
+                         expiresIn: 14
                     });
 
                     res.json({

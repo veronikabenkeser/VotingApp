@@ -88,8 +88,10 @@ app.get('*',function(req,res){ //going to the link itself https://try4-autumncat
 // });
 
 //Start the server
-app.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
- 
-  console.log("Server listening.. ");
-});
+//Code that binds our app to the network
+// app.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
+//   console.log("Server listening.. ");
+// });
+
+module.exports = app;
 
