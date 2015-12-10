@@ -25,7 +25,7 @@ define(['backbone',
                     // take the href of the link clicked
                     var href = $(this).attr("href");
                     // pass this link to Backbone
-                    Backbone.history.navigate(href, true);
+                    Backbone.history.navigate(href, true);//routing all a href elements in links (in templates) to the backbone router.
                 });
 
                 this.homeView = new HomeView();
@@ -41,7 +41,8 @@ define(['backbone',
                 'logout': 'logout',
                 "signup": "showSignup",
                 "polls/add": "addPoll",
-                "polls/:id": "pollDetails"
+                "polls/:id": "pollDetails",
+                "mypolls": "showMyPolls"
 
             },
             // initialize: function(){
@@ -171,6 +172,14 @@ define(['backbone',
 
                     }
                 });
+            },
+            showMyPolls: function(){
+                 if (app.isAuthenticated()) {
+                    EventBus.trigger('home:displayView', new AuthorizedHomepageView());
+                }
+                else {
+                    EventBus.trigger('home:displayView', new WelcomeView());
+                }
             }
         });
 

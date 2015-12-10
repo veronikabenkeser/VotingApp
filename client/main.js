@@ -47,6 +47,8 @@ require.config({
 
 require(['jquery', 'underscore', 'backbone', 'router', 'eventBus', 'globals', 'app'], function($, _, Backbone, AppRouter, EventBus, globals, app) {
     $(function() {
+
+
         //To prevent memory leaks when views are changed/closed
         _.extend(Backbone.View.prototype, {
             //Handle cleanup of view
@@ -110,7 +112,9 @@ require(['jquery', 'underscore', 'backbone', 'router', 'eventBus', 'globals', 'a
             //of the AJAX calls.
             //before ajax req is sent to api links
             beforeSend: function(xhr) {
+                console.log('beforesend');
                 var token = window.localStorage.getItem(globals.auth.TOKEN_KEY);
+                console.log('set token');
                 xhr.setRequestHeader('x-access-token', token);
             }
         });

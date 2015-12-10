@@ -23,7 +23,7 @@ app.use(bodyParser.json());
 app.use(function(req,res,next){
   res.setHeader('Access-Control-Allow-Origin','*');
   res.setHeader('Access-Control-Allow-Methods','GET','POST');
-  res.setHeader('Access-Control-Allow-Headers','X-Requested-With,content-type,Authorization')
+  res.setHeader('Access-Control-Allow-Headers','X-Requested-With,content-type,Authorization');
   next();
   
 });
@@ -70,6 +70,7 @@ app.use(express.static(__dirname+'/client'));
 
 var apiRoutes = require("./app/routes/api")(app,express);
 
+
 //Register our apiRoutes
 app.use('/api',apiRoutes);
 
@@ -78,21 +79,32 @@ app.use('/api',apiRoutes);
 //For all other routes (*), we will send the user to our frontend application where Angular can handle routing them from there.
 
 
-// app.get('*',function(req,res){ //going to the link itself https://try4-autumncat.c9users.io
 
-//   res.sendFile(path.join(__dirname+'/client/index.html'));
-//   console.log("this is happening.");
-// });
 
 // app.get('/',function(req,res){ //going to the link itself https://try4-autumncat.c9users.io
-//   // res.sendFile();
+//   res.sendFile();
 //   console.log("this is happening.");
 // });
+
+
 
 //Start the server
 //Code that binds our app to the network
 // app.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
 //   console.log("Server listening.. ");
+// });
+
+
+//When the user goes to http://examples.com/posts (a client-side route) directly,
+// will serve up the index file and the request will then be handled by Backbone.
+app.get('*', function(req, res){
+  res.sendfile('./client/index.html');
+}); 
+
+// app.get('*',function(req,res){ //going to the link itself https://try4-autumncat.c9users.io
+
+//   res.sendFile(path.join(__dirname+'/client/index.html'));
+//   console.log("this is happening.");
 // });
 
 module.exports = app;

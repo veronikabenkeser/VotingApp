@@ -1,132 +1,164 @@
 var User = require('../models/user');
-var jwt = require('jsonwebtoken');
 var config = require('../../config/server');
-var Poll = require("../models/poll");
-
 var superSecret = config.secret;
-//passing app and express from the server.js file
-module.exports = function(app, express) {
+var jwt = require('jsonwebtoken');
+
+var Poll = require("../models/poll");
+var users=require("../controllers/users");
+var polls = require("../controllers/polls");
+
+
+
+module.exports= function(app,express){
     var apiRouter = express.Router();
-
     apiRouter.route('/polls')
+      .get(function(req,res){
+          polls.getAllPolls(req,res);
+      })
+      .post(function(req,res){
+          polls.addPoll(req,res);
+      });
+      
+      
+       apiRouter.route('/polls/:poll_id')
         .get(function(req, res) {
-            Poll.find(function(err, polls) {
-                if (err) return res.send(err);
-
-                //return all of the polls
-                res.json(polls);
-            });
+          polls.getById(req,res);
         })
-        .post(function(req, res) {
-            var poll = new Poll();
-            poll.name = req.body.name;
-            poll.option1 = req.body.option1;
-            poll.option2 = req.body.option2;
+         .delete(function(req, res) {
+           polls.deletePoll(req,res);
+         });
+         
+           apiRouter.route('/users')
+             .post(function(req, res) {
+               users.addUser(req,res);
+             });
+        
+  
+//passing app and express from the server.js file
+// module.exports = function(app, express) {
+//     var apiRouter = express.Router();
 
-            //save the poll and check for errors
-            poll.save(function(err, data) {
-                if (err) {
-                    //duplicate entry
+    // apiRouter.route('/polls')
+        // .get(function(req, res) {
+        //     Poll.find(function(err, polls) {
+        //         if (err) return res.send(err);
 
-                    return res.json({
-                        success: false,
-                        message: 'Poll was not saved.'
-                    });
-                }
+        //         //return all of the polls
+        //         res.json(polls);
+            
+        //     });
+        // })
+        // .post(function(req, res) {
+        //     var poll = new Poll();
+        //     poll.name = req.body.name;
+        //     poll.option1 = req.body.option1;
+        //     poll.option2 = req.body.option2;
 
-                res.json(data);
-                //   res.json({message: 'New poll created!'});
-            });
-        });
+        //     //save the poll and check for errors
+        //     poll.save(function(err, data) {
+        //         if (err) {
+        //             //duplicate entry
 
-    apiRouter.route('/polls/:poll_id')
-        //get the poll with that id
-        //accessed via GET ....polls/:poll_id
-        .get(function(req, res) {
-            Poll.findById(req.params.poll_id, function(err, poll) {
-                if (err) res.send(err);
+        //             return res.json({
+        //                 success: false,
+        //                 message: 'Poll was not saved.'
+        //             });
+        //         }
 
-                res.json(poll);
+        //         res.json(data);
+        //         //   res.json({message: 'New poll created!'});
+        //     });
+        // });
 
-            });
-        })
+    
+    // apiRouter.route('/polls/:poll_id')
+    //     //get the poll with that id
+    //     //accessed via GET ....polls/:poll_id
+    //     .get(function(req, res) {
+    //         Poll.findById(req.params.poll_id, function(err, poll) {
+    //             if (err) res.send(err);
+
+    //             res.json(poll);
+
+    //         });
+    //     })
         //update the options of this poll
         //accessed via PUT .../api/polls/:poll_id
-        .put(function(req, res) {
-            Poll.findById(req.params.poll_id, function(err, poll) {
-                if (err) res.send(err);
+        // .put(function(req, res) {
+        //     Poll.findById(req.params.poll_id, function(err, poll) {
+        //         if (err) res.send(err);
 
-                //update the option if it's not blank and doesnt already exist
-                if (req.body.option) {
-                    if (poll.options.indexOf(req.body.option) === -1) {
-                        poll.options.push(req.body.option);
+        //         //update the option if it's not blank and doesnt already exist
+        //         if (req.body.option) {
+        //             if (poll.options.indexOf(req.body.option) === -1) {
+        //                 poll.options.push(req.body.option);
 
-                        //save the updated poll into the database
-                        poll.save(function(err) {
-                            if (err) res.send(err);
-                            res.json({
-                                message: 'The poll has been updated!'
-                            });
-                        });
-                    }
-                    else {
-                        res.json({
-                            message: 'This option already exists.'
-                        });
-                    }
-                }
-            });
-            //   });
-        })
-        .delete(function(req, res) {
-            Poll.remove({
-                _id: req.params.poll_id
-            }, function(err, poll) {
-                if (err) return res.send(err);
-                res.json({
-                    message: 'This poll has been successfully deleted.'
-                });
-            });
-        });
+        //                 //save the updated poll into the database
+        //                 poll.save(function(err) {
+        //                     if (err) res.send(err);
+        //                     res.json({
+        //                         message: 'The poll has been updated!'
+        //                     });
+        //                 });
+        //             }
+        //             else {
+        //                 res.json({
+        //                     message: 'This option already exists.'
+        //                 });
+        //             }
+        //         }
+        //     });
+        //     //   });
+        // })
+        // .delete(function(req, res) {
+        //     Poll.remove({
+        //         _id: req.params.poll_id
+        //     }, function(err, poll) {
+        //         if (err) return res.send(err);
+        //         res.json({
+        //             message: 'This poll has been successfully deleted.'
+        //         });
+        //     });
+        // });
 
 
     //Get all users and create a new account
-    apiRouter.route('/users')
-        .get(function(req, res) {
-            User.find(function(err, users) {
-                if (err) return res.send(err);
-                res.json(users);
-            });
-        })
+    // apiRouter.route('/users')
+    //     .get(function(req, res) {
+    //         User.find(function(err, users) {
+    //             if (err) return res.send(err);
+    //             res.json(users);
+    //         });
+    //     })
 
     //create a new user (accessed at POST at ..../api/users)
-    .post(function(req, res) {
-        //create a new instance of the User model
-        var user = new User();
+    // .post(function(req, res) {
+    //     //create a new instance of the User model
+    //     var user = new User();
 
-        //set the users info(comes from the req)
-        user.name = req.body.name;
-        user.email = req.body.email;
-        user.password = req.body.password;
+    //     //set the users info(comes from the req)
+    //     user.name = req.body.name;
+    //     user.email = req.body.email;
+    //     user.password = req.body.password;
 
-        //save the user to the database and check for errors
-        user.save(function(err) {
-            if (err) {
-                //duplicate entry
-                if (err.code === 11000) {
-                    return res.json(err);
-                    //   return res.json({success: false, message : 'A user with that user name already exists.'});
-                }
-                else {
-                    return res.send(err);
-                }
-            }
+    //     //save the user to the database and check for errors
+    //     user.save(function(err) {
+    //         if (err) {
+    //             //duplicate entry
+    //             if (err.code === 11000) {
+    //                 return res.json(err);
+    //                 //   return res.json({success: false, message : 'A user with that user name already exists.'});
+    //             }
+    //             else {
+    //                 return res.send(err);
+    //             }
+    //         }
 
-            res.json({
-                message: 'User created!'
-            });
-        });
-    });
+    //         res.json({
+    //             message: 'User created!'
+    //         });
+    //     });
+    // });
 
     //Authenticating Users
     apiRouter.post('/authenticate', function(req, res) {
@@ -164,7 +196,7 @@ module.exports = function(app, express) {
                             //The secret is the signature held by the server.
                     }, superSecret, {
                         // expiresIn: 1440
-                         expiresIn: 14
+                         expiresIn: 1440
                     });
 
                     res.json({
@@ -185,8 +217,11 @@ module.exports = function(app, express) {
     //-- api USer tOKEN
 
     apiRouter.use(function(req, res, next) {
+      
+       console.log("CHECK");
+      
         //Check post params,url params,  or header params for token
-
+   
         //URL parameters are what follows '?'' here:
         //http://example.com/api/users?id=4&token=sdfa3&geo=us
         //URL Parameters are grabbed using req.param.variable_name
@@ -236,36 +271,39 @@ module.exports = function(app, express) {
     //View, update or delete an existing user account
     apiRouter.route('/users/:user_id')
         .get(function(req, res) {
-            User.findById(req.params.user_id, function(err, user) {
-                if (err) return res.send(err);
-                res.json(user);
-            });
+            // User.findById(req.params.user_id, function(err, user) {
+            //     if (err) return res.send(err);
+            //     res.json(user);
+            // });
+            users.getById(req,res);
         })
         //update user
         .put(function(req, res) {
-            User.findById(req.params.user_id, function(err, user) {
-                if (err) return res.send(err);
-                if (req.body.name) user.name = req.body.name;
-                if (req.body.email) user.email = req.body.email;
-                if (req.body.password) user.password = req.body.password;
+            // User.findById(req.params.user_id, function(err, user) {
+            //     if (err) return res.send(err);
+            //     if (req.body.name) user.name = req.body.name;
+            //     if (req.body.email) user.email = req.body.email;
+            //     if (req.body.password) user.password = req.body.password;
 
-                //save the changes!
-                user.save(function(err, user) {
-                    if (err) return res.send(err);
-                    res.json({
-                        message: 'Your account has been updated.'
-                    });
-                });
+            //     //save the changes!
+            //     user.save(function(err, user) {
+            //         if (err) return res.send(err);
+            //         res.json({
+            //             message: 'Your account has been updated.'
+            //         });
+            //     });
 
-            });
+            // });
+            users.modifyUser(req,res);
         })
         .delete(function(req, res) {
-            User.remove(req.params.user_id, function(err, user) {
-                if (err) return res.send(err);
-                res.json({
-                    message: 'Your account has been deleted.'
-                });
-            });
+            // User.remove(req.params.user_id, function(err, user) {
+            //     if (err) return res.send(err);
+            //     res.json({
+            //         message: 'Your account has been deleted.'
+            //     });
+            // });
+            users.deleteUser(req,res);
         });
 
     //As an authenticated user, I can create a poll , edit a poll, or delete one of my polls

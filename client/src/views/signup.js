@@ -138,7 +138,7 @@ define(['jquery',
             //if not, save the user in the database and login the user into the site
 
             //automatically validating according to the model beofre save
-            this.model.save(null, {
+            this.model.save(null, { //issues a post request to the link in user model.
                 wait: true, //don't update the client side model until the server side trip is successful
                 success: function(model) { //will occur when the server successfully returns a response
                     //   self.render();
