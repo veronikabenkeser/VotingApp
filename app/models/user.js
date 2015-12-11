@@ -15,11 +15,15 @@ var UserSchema = new Schema({
         type: String,
         required: true,
         select: false
-    }
+    },
+    
+    polls: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Poll'
+    }]
 
     //     //By setting select to false , the password will not be returned when listing 
     //our users, unless it is explicitly called.
-
 });
 
 UserSchema.pre('save', function(next) {

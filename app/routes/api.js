@@ -31,6 +31,9 @@ module.exports= function(app,express){
            apiRouter.route('/users')
              .post(function(req, res) {
                users.addUser(req,res);
+             })
+             .get(function(req,res){
+                 users.getAllUsers(req,res);
              });
         
   
@@ -307,65 +310,20 @@ module.exports= function(app,express){
         });
 
     //As an authenticated user, I can create a poll , edit a poll, or delete one of my polls
-    apiRouter.route('/mypolls')
-        //accessed via GET ....api/mypolls
-
-    //get this user's polls ??
-    .get(function(req, res) {
-        Poll.find(function(err, polls) {
-            if (err) return res.send(err);
-
-            //return all of the polls
-            res.json(polls);
-        });
-    })
-
-    .post(function(req, res) {
-        var poll = new Poll();
-
-        //set poll info (comes from the req)
-        poll.name = req.body.name;
-        poll.option1 = req.body.option1;
-        poll.option2 = req.body.option2;
-
-        poll.save(function(err) {
-            if (err) {
-                res.send(err);
-            }
-            res.json({
-                message: 'New poll created!'
-            });
-        });
-    })
-
-    //accessed at DELETE ..../mypolls
+    // apiRouter.route('/mypolls')
+      apiRouter.route('/users/:user_id/polls')
+        .post(function(req, res) {
+          users.addPoll(req,res);
+        })
+    //accessed at DELETE all polls
     .delete(function(req, res) {
-        Poll.remove(function(err) {
-            if (err) return res.send(err);
-            res.json({
-                message: 'removed all the polls from the collection.'
-            });
-        });
+       users.deleteAllPolls(req,res);
     });
 
-    apiRouter.route('/mypolls/:poll_id')
-
-    .get(function(req, res) {
-        Poll.findById(req.params.poll_id, function(err, poll) {
-            if (err) return res.send(err);
-            res.json(poll);
-        });
-
-    });
-
-    //   .delete(function(req, res) {
-    //       Poll.remove({
-    //         _id: req.params.poll_id
-    //       }, function(err, poll){
-    //         if(err) return res.send(err);
-    //         res.json({message: 'This poll has been successfully deleted.'});
-    //       });
-    //   });  
+    apiRouter.route('/users/:user_id/polls/:poll_id')
+      .delete(function(req, res) {
+          users.deletePoll(req,res);
+      });  
 
     apiRouter.get('/me', function(req, res) {
         //autherization token stored in req.decoded

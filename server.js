@@ -29,7 +29,16 @@ app.use(function(req,res,next){
 });
 
 //Connect to MongoDb
-mongoose.connect("mongodb://"+process.env.IP+"/mydb");
+// mongoose.connect("mongodb://"+process.env.IP+"/mydb");
+mongoose.connect(config.database[app.settings.env],function(err,res){
+  if(err){
+    console.log(console.log('Error connecting to the database. ' + err));
+  }else{
+    console.log('Connected to Database: '+ config.database[app.settings.env]);
+  }
+  
+});
+
 // mongoose.connect(config.database);
 //log all requests to the console
 app.use(morgan('dev'));
@@ -98,7 +107,8 @@ app.use('/api',apiRoutes);
 //When the user goes to http://examples.com/posts (a client-side route) directly,
 // will serve up the index file and the request will then be handled by Backbone.
 app.get('*', function(req, res){
-  res.sendfile('./client/index.html');
+// res.sendfile('./client/index.html');
+  res.sendFile('./client/index.html');
 }); 
 
 // app.get('*',function(req,res){ //going to the link itself https://try4-autumncat.c9users.io

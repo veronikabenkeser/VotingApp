@@ -1,4 +1,3 @@
-var request = require("supertest");
 var app = require("./../../server");
 var proxyquire = require("proxyquire");
 var sinon = require("sinon");
@@ -29,8 +28,8 @@ describe('PollsController', function() {
         PollStub.save = function(callback) {
             callback(null, req.body); //assume error is null
         };
-        PollStub.findById = function(query,callback){
-            callback(null,{});
+        PollStub.findById = function(query, callback) {
+            callback(null, {});
         };
     });
 
@@ -45,95 +44,101 @@ describe('PollsController', function() {
             polls.getAllPolls(req, res);
             expect(res.json).calledOnce;
         });
-        
-        it('should send error if not found',function() {
-            var error ={};
+
+        it('should send error if not found', function() {
+            var error = {};
             PollStub.find = function(callback) {
-            callback(error, {});
+                callback(error, {});
             };
-            polls.getAllPolls(req,res);
+            polls.getAllPolls(req, res);
             expect(res.send).calledWith(error);
         });
     });
-    
-    describe('addPoll',function() {
-        
-        beforeEach(function(){
-            
-            req.body={
-                name:'testing',
+
+    describe('addPoll', function() {
+
+        beforeEach(function() {
+
+            req.body = {
+                name: 'testing',
                 option1: 'opt1',
                 option2: 'opt2'
             };
         });
-        
-       it('should be defined',function(){
-           expect(polls.addPoll).to.be.a('function');
-       });
-       
-       it('should call the models save function',function(){
-           PollStub.prototype.save = sinon.spy();
-           polls.addPoll(req,res);
-           expect(PollStub.prototype.save).calledOnce;
-       });
-       
-       it('should return json on save', function() {
-           PollStub.prototype.save = function(callback){
-               callback(null,req.body);//err is null
-           };
-           polls.addPoll(req,res);
-           expect(res.json).calledWith(req.body);
-       });
-       
-       it('should return an error on failed save', function() {
-           PollStub.prototype.save = function(callback){
-               callback({},req.body);//{} is the err obj
-           };
-           polls.addPoll(req,res);
-           expect(res.json).calledWith({success: false, 
-           message: 'Poll was not saved.'});
-       });
+
+        it('should be defined', function() {
+            expect(polls.addPoll).to.be.a('function');
+        });
+
+        it('should call the models save function', function() {
+            PollStub.prototype.save = sinon.spy();
+            polls.addPoll(req, res);
+            expect(PollStub.prototype.save).calledOnce;
+        });
+
+        it('should return json on save', function() {
+            PollStub.prototype.save = function(callback) {
+                callback(null, req.body); //err is null
+            };
+            polls.addPoll(req, res);
+            expect(res.json).calledWith(req.body);
+        });
+
+        it('should return an error on failed save', function() {
+            PollStub.prototype.save = function(callback) {
+                callback({}, req.body); //{} is the err obj
+            };
+            polls.addPoll(req, res);
+            expect(res.json).calledWith({
+                success: false,
+                message: 'Poll was not saved.'
+            });
+        });
     });
-    
-    describe('getById',function() {
-        it('should be defined',function(){
+
+    describe('getById', function() {
+        it('should be defined', function() {
             expect(polls.getById).to.be.a('function');
         });
-        
-        it('returns json if found',function() {
-            polls.getById(req,res);
+
+        it('returns json if found', function() {
+            polls.getById(req, res);
             expect(res.json).calledOnce;
         });
-        
-        it('returns an error if not found',function() {
-            PollStub.findById = function(query, callback){
-                callback({},{});
+
+        it('returns an error if not found', function() {
+            PollStub.findById = function(query, callback) {
+                callback({}, {});
             };
-            polls.getById(req,res);
-            expect(res.json).calledWith({error: 'Poll not found.'});
+            polls.getById(req, res);
+            expect(res.json).calledWith({
+                error: 'Poll not found.'
+            });
         });
     });
-    
-    describe('deletePoll',function() {
-        
-        it('should be defined',function(){
+
+    describe('deletePoll', function() {
+
+        it('should be defined', function() {
             expect(polls.deletePoll).to.be.a('function');
         });
-        
-        it('return json if poll was deleted successfully',function() {
-            PollStub.remove = function(query, callback){
-                callback(null,{});
+
+        it('return json if poll was deleted successfully', function() {
+            PollStub.remove = function(query, callback) {
+                callback(null, {});
             };
-            polls.deletePoll(req,res);
-            expect(res.json).calledWith({message: 'This poll has been successfully deleted.'});
+            polls.deletePoll(req, res);
+            expect(res.json).calledWith({
+                message: 'This poll has been successfully deleted.'
+            });
         });
-        
-        it('return an error if unable to delete poll',function() {
-            var error ={};
-            PollStub.remove = function(query, callback){
-                callback(error,{});
+
+        it('return an error if unable to delete poll', function() {
+            var error = {};
+            PollStub.remove = function(query, callback) {
+                callback(error, {});
             };
-            polls.deletePoll(req,res);
+            polls.deletePoll(req, res);
             expect(res.send).calledWith(error);
         });
     });
