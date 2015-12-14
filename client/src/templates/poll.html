@@ -2,12 +2,13 @@
     <li>
         <%=name%>
     </li>
-    <li>
-        <%=option1 %>
-    </li>
-    <li>
-        <%=option2%>
-    </li>
+    <% options.forEach(function(option){ %>
+        <% console.log( "TEEXT" + option.text); %>
+            <li>
+                <%=o ption.text %>
+            </li>
+
+            <% }); %>
 
 </ul>
 <button class="delete btn btn-danger">Delete</button>

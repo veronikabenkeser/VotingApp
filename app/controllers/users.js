@@ -106,8 +106,8 @@ module.exports = {
     },
     deleteAllPolls: function(req, res) {
         User.findById(req.params.user_id, function(err, user) {
-
-            //remove all polls belonging to this user from the polls collection
+            if (err) return res.status(400).json(err);
+            //remove all polls belonging to this user
             //(once the model is deleted, it is removed from the collection automatically)
             user.polls.forEach(function(poll_id) {
                 Poll.remove({
@@ -123,20 +123,26 @@ module.exports = {
             });
         });
     },
-    deletePoll:function(req,res){
-           User.findById(req.params.user_id, function(err, user) {
-               if(err) return res.status(400).json(err);
-               var index = user.polls.indexOf(req.params.poll_id);
-               if(index>=0){
-                   user.polls.splice(index,1);
-               }else{
-                   return res.json({error: 'You do not have permission to delete this poll.'});
-               }
-               
-               Poll.remove({_id: req.params.poll_id},function(err, user) {
-                   if (err) return res.status(500).json(err);
-                   res.json(user);
-               });
-           });
+    deletePoll: function(req, res) {
+        User.findById(req.params.user_id, function(err, user) {
+            if (err) return res.status(400).json(err);
+
+            Poll.remove({
+                _id: req.params.poll_id
+            }, function(err, poll) {
+                if (err) return res.status(500).json(err);
+            });
+
+            var index = user.polls.indexOf(req.params.poll_id);
+            if (index >= 0) {
+                user.polls.splice(index, 1);
+                return res.json(user);
+            }
+            else {
+                return res.json({
+                    error: 'You do not have permission to delete this poll.'
+                });
+            }
+        });
     }
 };

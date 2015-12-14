@@ -5,7 +5,8 @@ require.config({
         'jquery': 'libs/jquery/dist/jquery',
         'underscore': 'libs/underscore/underscore',
         'backbone': 'libs/backbone/backbone',
-        'text': 'libs/text/text'
+        'text': 'libs/text/text',
+        'backbone-relational':'libs/backbone-relational/backbone-relational'
             // 'backbone-validation':'libs/backbone.validation/dist/backbone-validation'
             // 'bootstrap': "libs/bootstrap/dist/css/bootstrap.min"
 
@@ -13,6 +14,10 @@ require.config({
     shim: {
         'underscore': {
             exports: '_' //This line tells RequireJS that the script in 'lib/underscore.js' creates a global variable called _ instead of defining a module. 
+        },
+        'backbone-relational':{
+            deps: ['underscore','backbone'],
+            exports: 'backbone-relational'
         }
         // backbone: {
         //     //These script dependencies should be loaded before loading backbone.js
@@ -45,7 +50,7 @@ require.config({
 //     });
 // });
 
-require(['jquery', 'underscore', 'backbone', 'router', 'eventBus', 'globals', 'app'], function($, _, Backbone, AppRouter, EventBus, globals, app) {
+require(['jquery', 'underscore', 'backbone', 'router', 'eventBus', 'globals', 'app','backbone-relational'], function($, _, Backbone, AppRouter, EventBus, globals, app) {
     $(function() {
 
 

@@ -12,6 +12,8 @@ define(['jquery',
             'click .delete': 'deletePoll'
         },
         initialize: function() {
+            this.model.fetch();
+    this.model.bind('change', this.render, this);
             this.render();
         },
         deletePoll: function() {
@@ -35,6 +37,7 @@ define(['jquery',
         },
         render: function() {
             //this.el is what we defined in tagName
+        
             this.$el.html(this.template(this.model.toJSON()));
 
             return this;
