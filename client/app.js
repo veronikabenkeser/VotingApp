@@ -7,7 +7,7 @@ define([
 ], function($, User, globals, EventBus) {
     var user;
 
-    function authenticated(response) {
+    function authenticated(response) { //response from server at api/authenticate
         window.localStorage.setItem(globals.auth.TOKEN_KEY, response.token);
         window.localStorage.setItem(globals.auth.USER_KEY, response._id);
         initializeUser();
@@ -25,11 +25,13 @@ define([
 
     function initializeUser() {
         var d = $.Deferred();
+        console.log("user here");
+        console.log(user);
         if (isAuthenticated() && !user) {
             user = new User({
                 _id: window.localStorage.getItem(globals.auth.USER_KEY)
             });
-            user.fetch().done(function() {
+            user.fetch().done(function() { //populates all the properties on the user, including, name, email, polls, etc
                 EventBus.trigger('home:updateUserInfo');
                 d.resolve();
             });

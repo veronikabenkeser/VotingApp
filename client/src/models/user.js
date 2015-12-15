@@ -1,4 +1,4 @@
-define(['underscore', 'backbone', '../collections/polls'], function(_, Backbone, Polls) {
+define(['underscore', 'backbone', 'src/collections/polls'], function(_, Backbone, Polls) {
   var User = Backbone.Model.extend({
     urlRoot: "/api/users",
     idAttribute: '_id',
@@ -8,10 +8,16 @@ define(['underscore', 'backbone', '../collections/polls'], function(_, Backbone,
       email: '',
       password: ''
     },
-    initialize: function() {
-      this.polls = new Polls();
-      this.polls.url = '/api/users/' + this.id + '/polls';
+    initialize: function() {//called whenever a model's data is returned by the server(fetch and save). 
     },
+     parse: function(response) {
+    this.polls = new Polls(response.polls, {
+      url: '/api/'+ this._id +'polls/'
+    });
+    /*remove polls info if not needed*/
+    
+    return response;
+  },
     patterns: {
       specialCharacters: '[^a-zA-Z 0-9]+',
 
@@ -21,7 +27,6 @@ define(['underscore', 'backbone', '../collections/polls'], function(_, Backbone,
     },
     validators: {
       minLength: function(value, minLength) {
-        console.log("REAL VAL OF VAL " + value);
         return value.length >= minLength;
 
       },
@@ -39,9 +44,7 @@ define(['underscore', 'backbone', '../collections/polls'], function(_, Backbone,
     },
     validate: function(attrs) {
       var self = this;
-      console.log("here it is " + attrs.name);
-
-
+  
       var errors = this.errors = {};
 
       if (attrs.password != null) {
@@ -86,6 +89,8 @@ define(['underscore', 'backbone', '../collections/polls'], function(_, Backbone,
       if (!_.isEmpty(errors)) {
         self.trigger('invalid', errors);
         return errors;
+      } else {
+        return false;
       }
     }
   });

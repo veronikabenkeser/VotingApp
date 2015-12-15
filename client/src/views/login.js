@@ -26,7 +26,6 @@ define(['jquery',
             var self = this;
             e.preventDefault();
             //   var url = "/api/authenticate";
-            console.log("logging In now");
             var formValues = {
                 email: $('#email').val(),
                 password: $('#password').val()

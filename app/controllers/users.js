@@ -1,13 +1,14 @@
 var User = require('../models/user');
 var Poll = require("../models/poll");
+var config = require('../../config/server');
+var superSecret = config.secret;
+var jwt = require('jsonwebtoken');
 
 module.exports = {
     getAllUsers: function(req, res) {
         console.log(User.model);
         User.find(function(err, users) {
             if (err) return res.send(err);
-
-            //return all of the polls
             res.json(users);
         });
     },
@@ -23,10 +24,7 @@ module.exports = {
         //save the user to the database and check for errors
         user.save(function(err, user) {
             if (err) {
-                //duplicate entry
                 if (err.code === 11000) {
-                    // return res.json(err);
-                    //   return res.json({success: false, message : 'A user with that user name already exists.'});
                     return res.status(400).json({
                         error: 'A user with that user name already exists.'
                     });
@@ -39,11 +37,10 @@ module.exports = {
                     });
                 }
             }
-
-            // res.json({
-            //     message: 'User created!'
-            // });
-            res.json(user);
+            res.json({
+                success: true,
+                message: 'New user created.'
+            });
         });
     },
     getById: function(req, res) {
@@ -53,27 +50,6 @@ module.exports = {
                 error: 'User not found.'
             });
             res.json(user);
-        });
-    },
-    modifyUser: function(req, res) {
-        User.findById(req.params.user_id, function(err, user) {
-            if (err) return res.send(err);
-            if (req.body.name) user.name = req.body.name;
-            if (req.body.email) user.email = req.body.email;
-            if (req.body.password) user.password = req.body.password;
-
-            //save the changes!
-            user.save(function(err, user) {
-                // if (err) return res.send(err);
-                if (err) return res.status(500).json({
-                    error: 'Unable to save changes.'
-                });
-                // res.json({
-                //     message: 'Your account has been updated.'
-                // });
-                res.json(user);
-            });
-
         });
     },
     deleteUser: function(req, res) {
@@ -103,6 +79,24 @@ module.exports = {
                 });
             });
         });
+    },
+    getAllPolls: function(req, res) {
+        var userPolls = [];
+        //return all polls belonging to this user
+        User.findById(req.params.user_id, function(err, user) {
+            if (err) return res.status(400).json(err);
+            user.polls.forEach(function(poll_id) {
+                Poll.findById(poll_id, function(err, poll) {
+                    userPolls.push(poll);
+                });
+            });
+        });
+
+        // Poll.findById(req.params.poll_id),function(err,poll){
+        //       if (err) return res.status(400).json(req.params);
+        //       res.json(poll);
+        // }
+        res.json(userPolls);
     },
     deleteAllPolls: function(req, res) {
         User.findById(req.params.user_id, function(err, user) {
@@ -141,6 +135,44 @@ module.exports = {
             else {
                 return res.json({
                     error: 'You do not have permission to delete this poll.'
+                });
+            }
+        });
+    },
+    changeSettings: function(req, res) {
+        console.log('req body');
+        console.log(req.body);
+        var id = req.body.id;
+        User.findOne({
+            _id: id
+        }).select('password').exec(function(err, user) {
+            if (err) return res.status(400).json(err);
+            //no user with that email found
+            if (!user) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Authentication failed. User not found.'
+                });
+            }
+
+            var validPassword = user.comparePassword(req.body.oldPassword);
+            if (!validPassword) {
+                res.status(400).json({
+                    success: false,
+                    message: 'Authentication failed. Wrong password.'
+                });
+            }
+            else {
+                //update password
+                user.password = req.body.newPassword;
+                user.save(function(err, user) {
+                    if (err) return res.status(500).json({
+                        error: err
+                    });
+
+                    res.json({
+                        message: 'Password has been updated.'
+                    });
                 });
             }
         });

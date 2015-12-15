@@ -8,6 +8,7 @@ define(['jquery', 'backbone', 'src/collections/polls', 'src/views/poll'], functi
             // // this.render();
             // this.listenTo(this.collection, 'add', this.renderPoll);
             // this.listenTo(this.collection, 'reset', this.render);
+            this.collection = new Polls(null, {url:'/api/polls/'});
             this.collection.on('reset', this.render, this);
             this.collection.on('add', this.renderPoll, this);
         },
@@ -23,6 +24,7 @@ define(['jquery', 'backbone', 'src/collections/polls', 'src/views/poll'], functi
         },
         //Render a poll by creating a PollView and appending the element to the polls element
         renderPoll: function(item) {
+            console.log('item here' +item);
                 var pollView = new PollView({
                     model: item
                 });
@@ -46,3 +48,4 @@ define(['jquery', 'backbone', 'src/collections/polls', 'src/views/poll'], functi
 
     return PollsView;
 });
+

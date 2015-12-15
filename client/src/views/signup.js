@@ -4,8 +4,9 @@ define(['jquery',
     'text!src/templates/signup.html',
     'backbone',
     // 'backbone-validation',
-    'eventBus'
-], function($, _, User, SignupTemplate, Backbone, EventBus) {
+    'eventBus',
+    'globals'
+], function($, _, User, SignupTemplate, Backbone, EventBus, globals) {
     var SignupView = Backbone.View.extend({
         // tagname:'div',
         el: "#content",
@@ -32,16 +33,14 @@ define(['jquery',
             tempObj[fieldName] = fieldValue;
             var errors = this.model.validate(tempObj);
 
-            if (errors === undefined) {
+            if (!errors) {
                 console.log("error obj is empty");
                 this.removeValidationErr(fieldName);
             }
         },
         realTimeOnInputChange: function(e) {
-            console.log("KEYDOWN");
             var fieldName = e.target.id;
             if ($('#' + fieldName).parent().hasClass('error')) {
-                console.log("REAL TIME ");
                 this.onInputChange(e);
                 // this.removeValidationErr(fieldName);
             }
@@ -72,8 +71,7 @@ define(['jquery',
             e.preventDefault();
             var self = this;
             $('#signup-form div').children('input').each(function(index, elem) {
-
-                -self.model.set(elem.id, $(elem).val()); + self.model.set(elem.id, $(elem).val());
+                self.model.set(elem.id, $(elem).val());
 
             });
 
@@ -82,20 +80,31 @@ define(['jquery',
             self.model.save(null, { //issues a post request to the link in user model.
 
                 wait: true, //don't update the client side model until the server side trip is successful
-                success: function(model) { //will occur when the server successfully returns a response
+                success: function(model) {
                     //   self.render();
-                    console.log("SAVED");
 
                     //the server responds to the POST req with JSON representing the saved model
-                    console.log(model);
-                    console.log(model.id);
-                    //  myRouter.navigate('polls/'+model.id, {trigger:true});
-                    EventBus.trigger('router:navigate', {
-                        route: '',
-                        options: {
-                            trigger: true
-                        }
-                    });
+                    var dataObj = {
+                        email: model.get('email'),
+                        password: model.get('password')
+                    };
+
+                    $.ajax({
+                            url: globals.urls.AUTHENTICATE,
+                            type: 'POST',
+                            dataType: "json",
+                            data: dataObj
+                        })
+                        .done(function(response) {
+                            EventBus.trigger("app:authenticated", response);
+
+                        })
+                        .fail(function(response) {
+                            console.log("req failed");
+                            self.$('.alert-warning').text(response.message).show();
+
+                        });
+
                 },
                 error: function(model, error) {
                     console.log(model.toJSON());
@@ -107,29 +116,12 @@ define(['jquery',
             e.preventDefault();
             var fieldName = e.target.id;
             var fieldValue = e.target.value;
-            console.log("VALUES SET: ");
-            console.log("fieldname " + fieldName);
             this.model.set({
                 fieldName, fieldValue
             }, {
                 validate: true,
                 validateAll: false
             });
-        },
-        validate0: function(e) {
-            e.preventDefault();
-            var fieldName = e.target.id;
-            var fieldValue = e.target.value;
-            //     console.log("change to model detected automatically");
-            // this.model.set(fieldName,fieldValue);
-            this.model.set({
-                "password": "v"
-            }, {
-                validate: true,
-                validateAll: false
-            });
-            console.log("this models " + this.model.fieldName + " Is " + this.model.get(fieldName));
-            // this.model.set({fieldName,fieldValue}, {validate:true, validateAll:false});
         }
     });
 

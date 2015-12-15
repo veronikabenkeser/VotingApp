@@ -11,11 +11,12 @@ define(['backbone',
         'src/views/login',
         'src/views/welcome',
         'src/views/authorizedHomepage',
+        'src/views/settings',
         'eventBus',
         'app'
     ],
     function(Backbone, Polls, PollsView, PollView, HomeView, AddPollView, Poll,
-        User, SignupView, LoginView, WelcomeView, AuthorizedHomepageView, EventBus, app) {
+        User, SignupView, LoginView, WelcomeView, AuthorizedHomepageView, SettingsView, EventBus, app) {
         var AppRouter = Backbone.Router.extend({
             initialize: function() {
                 // setup the ajax links for the html5 push navigation
@@ -42,7 +43,8 @@ define(['backbone',
                 "signup": "showSignup",
                 "polls/add": "addPoll",
                 "polls/:id": "pollDetails",
-                "mypolls": "showMyPolls"
+                "mypolls": "showMyPolls",
+                "settings":"showSettings"
 
             },
             // initialize: function(){
@@ -99,7 +101,7 @@ define(['backbone',
                 // }
             },
             showPolls: function() {
-                var polls = new Polls();
+                var polls = new Polls(null, {url:'/api/polls/'});
                 polls.fetch() //fires collection reset event
                     .done(function() {
                         EventBus.trigger('home:displayView', new PollsView({
@@ -114,7 +116,7 @@ define(['backbone',
             },
             showPolls0: function() {
                 var self = this;
-                this.polls = new Polls();
+                this.polls = new Polls(null, {url:'/api/polls/'});
                 this.pollsView = new PollsView({
                     collection: this.polls
                 });
@@ -173,12 +175,72 @@ define(['backbone',
                     }
                 });
             },
-            showMyPolls: function(){
+            showSettings:function(){
+                   var user = new User();
                  if (app.isAuthenticated()) {
-                    EventBus.trigger('home:displayView', new AuthorizedHomepageView());
+                    EventBus.trigger('home:displayView', new SettingsView({
+                        model: user
+                    }));
                 }
                 else {
-                    EventBus.trigger('home:displayView', new WelcomeView());
+                    EventBus.trigger('home:displayView', new LoginView({
+                            model: user
+                    }));
+                }
+            },
+            showMyPolls: function(){
+                //  if (app.isAuthenticated()) {
+                //     EventBus.trigger('home:displayView', new AuthorizedHomepageView());
+                // }
+                // else {
+                //     EventBus.trigger('home:displayView', new WelcomeView());
+                // }
+                var user = app.getUser();
+                if(user){ //if the user is not null 
+                var pollsArr = user.polls;
+                // var ids = Object.keys(pollsObj).map(function (key) {return pollsObj[key]});
+              
+              console.log(pollsArr);
+              pollsArr.forEach(function(pollId){
+                  var poll = new Poll({_id: pollId});
+                  poll.fetch();
+              });
+              
+                // var polls = new Polls(); //new polls collection
+                // polls.fetch({
+                //     traditional: true,
+                //     data: {
+                //       poll_ids : idsArray
+                //     }
+                // })
+                //     .done(function(data){
+                //         console.log("DONE@");
+                //         console.log(data);
+                //     })
+                //     .fail(function() {
+                //         console.log("error fetching the collection");
+                //     });
+             
+            //  user.polls.fetch({reset:true}) //fetching from /api/users/:user_id/polls
+            //     .done(function(data){
+            //         console.log('here is the data'+data);
+            //     })
+            //     .fail(function(err){
+            //         console.log("error fetching the collection");
+            //         console.log(err);
+            //     })
+                 
+               //get this user's polls
+            //   var mypolls = Polls(); //new polls collection
+               //You don't need to create a separate mypollCollection, unless the behavior for this collection is different from the pollsCollection.
+              
+               
+               
+                    // EventBus.trigger('home:displayView', new PollsView());
+                    
+                    
+                } else {
+                    console.log("user is null");
                 }
             }
         });

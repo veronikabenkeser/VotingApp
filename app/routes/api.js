@@ -62,7 +62,7 @@ apiRouter.route('/options/:option_id')
 
             //no user with that email found
             if (!user) {
-                res.json({
+                return res.json({
                     success: false,
                     message: 'Authentication failed. User not found.'
                 });
@@ -71,7 +71,7 @@ apiRouter.route('/options/:option_id')
                 //if email is found, check if the password matches
                 var validPassword = user.comparePassword(req.body.password);
                 if (!validPassword) {
-                    res.json({
+                    return res.json({
                         success: false,
                         message: 'Authentication failed. Wrong password.'
                     });
@@ -154,8 +154,8 @@ apiRouter.route('/options/:option_id')
         .get(function(req, res) {
             users.getById(req, res);
         })
-        .put(function(req, res) {
-            users.modifyUser(req, res);
+        .put(function(req,res){
+             users.changeSettings(req,res);
         })
         .delete(function(req, res) {
             users.deleteUser(req, res);
@@ -168,12 +168,15 @@ apiRouter.route('/options/:option_id')
         })
         .delete(function(req, res) {
             users.deleteAllPolls(req, res);
+        })
+        .get(function(req,res){
+            users.getAllPolls(req,res);
         });
 
     apiRouter.route('/users/:user_id/polls/:poll_id')
         .delete(function(req, res) {
             users.deletePoll(req, res);
         });
-
+        
     return apiRouter;
 };

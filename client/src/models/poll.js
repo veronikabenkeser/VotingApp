@@ -1,4 +1,4 @@
-define(['underscore', 'backbone','../collections/options'], function(_, Backbone,Options) {
+define(['underscore', 'backbone','src/collections/options'], function(_, Backbone,Options) {
     var Poll = Backbone.Model.extend({
     //  var Poll = Backbone.RelationalModel.extend({
         urlRoot: "/api/polls",

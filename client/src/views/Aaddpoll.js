@@ -2,10 +2,13 @@ define(['jquery',
     'underscore',
     'backbone',
     'src/models/poll',
+    'src/models/user',
     'src/models/option',
     'text!src/templates/newpoll.html',
-     'eventBus'
-], function($, _, Backbone, Poll, Option, NewpollTemplate,EventBus) {
+     'eventBus',
+     'app',
+     'src/views/polls'
+], function($, _, Backbone, Poll, User, Option, NewpollTemplate,EventBus,app,PollsView) {
     var NewPollView = Backbone.View.extend({
         tagname: 'div',
         className: 'pollContainer',
@@ -74,6 +77,8 @@ define(['jquery',
             // });
             // poll.options.push({});
             //..........
+            
+            
             var formData ={};
             formData.name = $('#addPoll #name').val();
             formData.options = [];
@@ -118,13 +123,68 @@ define(['jquery',
             //     }
             //     return false;
             // }
-            this.addPoll();
+            this.addPoll(formData);
             return false;
         },
 
-        addPoll: function() {
+        addPoll: function(formData) {
             var self = this;
+            
+            //If a user is signed in, get the user's id and add this poll to the user's profile
+            var currentUser = app.getUser();
+             if(currentUser && currentUser.id){
+               
+                   $.ajax({
+                    url: '/api/users/'+ currentUser.id+'/polls',
+                    type: 'POST',
+                    dataType: "json",
+                    data: formData
+                })
+                .done(function(response) {
+                  console.log('added this user poll');
+                  
+                  //show all of this user's polls collection
+                //  currentUser.polls
+                
+                console.log('here is the response '+response);
+                console.log('here is the currentUser.polls'+currentUser.polls);
+                var za= currentUser.polls;
+                console.log(za instanceof Backbone.Collection);
+                currentUser.polls.fetch();//fires collection reset event
+                // currentUser.polls.fetch() //fires collection reset event
+                //     .done(function() {
+                //         EventBus.trigger('home:displayView', new PollsView({
+                //             collection: currentUser.polls
+                //         }));
+                //         console.log("DONEEEEEEE");
+                //     })
+                //     .fail(function() {
+                //         console.log("error fetching the collection");
+                //     });
+                 
+                })
+                // //  .fail(function(jqXHr, textStatus, errorThrown){
+                .fail(function(response) {
+                    console.log("failed to add this users poll");
+                    //   console.log(jqXHr.responseText);
+                    // self.$('.alert-warning').text(response.message).show();
+
+                });
+            
+            
+            
+             } else {
+            
+            // if(){
+            //     addToUser(this.model);
+            // }
+            
+            // //if the user is signed in, add this poll to this user's profile
            
+            
+            
+            
+           //save this model/ add this poll to all of the general polls 
             this.model.save(null, { //null makes backbone send all attributes for saving
             
                 wait: true, //don't update the client side model until the server side trip is successful
@@ -140,12 +200,14 @@ define(['jquery',
                     //     trigger: true
                     // });
                     
-                    EventBus.trigger('router:navigate', {
-                        route: 'polls',
-                        options: {
-                            trigger: true
-                        }
-                    });
+                    // EventBus.trigger('router:navigate', {
+                    //     route: 'polls',
+                    //     options: {
+                    //         trigger: true
+                    //     }
+                    // });
+                    
+                    EventBus.trigger();
                     
                 },
                 error: function(model, error) {
@@ -173,6 +235,8 @@ define(['jquery',
             //           console.log("ERROR OCCURED");
             //       }
             //   });
+            
+             }
         },
         displayValidationErr: function(fieldName, message) {
             //display the error message above the field
