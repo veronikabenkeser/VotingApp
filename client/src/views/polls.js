@@ -2,18 +2,18 @@ define(['jquery', 'backbone', 'src/collections/polls', 'src/views/poll'], functi
     var PollsView = Backbone.View.extend({
         el: '#content',
         initialize: function() {
-            console.log("HI");
-            // this.collection = new Polls();
-            // this.collection.fetch({reset:true});//populating our polls view from the database
             // // this.render();
-            // this.listenTo(this.collection, 'add', this.renderPoll);
-            // this.listenTo(this.collection, 'reset', this.render);
-            this.collection = new Polls(null, {url:'/api/polls/'});
+
+           //this.collection is the argument inside of new PollsView({collection: ... })
             this.collection.on('reset', this.render, this);
-            this.collection.on('add', this.renderPoll, this);
+            // this.collection.on('add', this.renderPoll, this);
+             this.collection.on('add', this.kop, this);
         },
         events: {
             'click #add': 'addPoll'
+        },
+        kop:function(){
+            console.log('just heard a collection add event');
         },
         //Render all polls by rendering each poll
         render: function() {

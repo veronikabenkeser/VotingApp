@@ -9,11 +9,14 @@ define(['underscore', 'backbone', 'src/collections/polls'], function(_, Backbone
       password: ''
     },
     initialize: function() {//called whenever a model's data is returned by the server(fetch and save). 
+    this.polls= new Polls();
+    this.polls.url ='/api/users/'+ this.id +'/polls/';
     },
      parse: function(response) {
-    this.polls = new Polls(response.polls, {
-      url: '/api/'+ this._id +'polls/'
-    });
+    // this.polls = new Polls(response.polls, {
+    //   url: '/api/'+ this._id +'polls/'
+    // });
+    
     /*remove polls info if not needed*/
     
     return response;

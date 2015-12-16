@@ -9,7 +9,7 @@
     "test": "mocha app/tests/*.test.js"
   },
   "dependencies": {
-    "async": "~0.2.8",
+    "async": "https://registry.npmjs.org/async/-/async-0.2.10.tgz",
     "backbone-relational": "^0.10.0",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.14.1",

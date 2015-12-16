@@ -1,6 +1,6 @@
 body{
     background-color:#eeeeee;
-    color:white;
+    color:black;
     
 }
 #form-error{
@@ -22,4 +22,9 @@ body{
 
 .jumbotron{
     background-color:#428bca;
+   
+}
+
+h1, h2, h3{
+   text-align: center;
 }

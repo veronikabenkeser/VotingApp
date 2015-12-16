@@ -62,7 +62,7 @@ apiRouter.route('/options/:option_id')
 
             //no user with that email found
             if (!user) {
-                return res.json({
+                return res.status(400).json({
                     success: false,
                     message: 'Authentication failed. User not found.'
                 });
@@ -71,7 +71,7 @@ apiRouter.route('/options/:option_id')
                 //if email is found, check if the password matches
                 var validPassword = user.comparePassword(req.body.password);
                 if (!validPassword) {
-                    return res.json({
+                    return res.status(400).json({
                         success: false,
                         message: 'Authentication failed. Wrong password.'
                     });

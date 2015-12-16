@@ -51,14 +51,12 @@ module.exports = {
         
         console.log("HERE IS HTE OBJ options "+poll.options);
         poll.save(function(err, data) {
-            if (err) {
-                //duplicate entry
-                 return res.json(err);
+            if(err)return res.status(502).json(err);
+            
                 //  return res.json({
                 //     success: false,
                 //     message: 'Poll was not saved.'
                 // });
-            }
             //   Poll.findById(data._id).populate('options')
             //               .exec(function(err,datai){
             //                   console.log(JSON.stringify(datai,null,'/t'));

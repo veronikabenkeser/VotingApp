@@ -3,6 +3,7 @@ var Poll = require("../models/poll");
 var config = require('../../config/server');
 var superSecret = config.secret;
 var jwt = require('jsonwebtoken');
+var async = require('async');
 
 module.exports = {
     getAllUsers: function(req, res) {
@@ -66,38 +67,37 @@ module.exports = {
     addPoll: function(req, res) {
         User.findById(req.params.user_id, function(err, user) {
             if (err) return res.status(400).json(err);
+            console.log('about to create poll');
             var poll = new Poll(req.body);
-
+            // var generalPollCollection = new Polls(null, {url:'/api/polls/'});
+             
+            //user.polls is the User's Polls Collection
             user.polls.push(poll);
+            console.log('just pushed poll');
 
-            // add this poll to the user's schema and to the polls collection
+            // add this poll to the user's schema and save the poll model
             user.save(function(err, user) {
                 if (err) return res.status(500).json(err);
+                
                 poll.save(function(err, poll) {
                     if (err) return res.status(500).json(err);
-                    res.json(user);
+              
                 });
+                
+                 res.json(user);
             });
         });
     },
-    getAllPolls: function(req, res) {
-        var userPolls = [];
-        //return all polls belonging to this user
-        User.findById(req.params.user_id, function(err, user) {
-            if (err) return res.status(400).json(err);
-            user.polls.forEach(function(poll_id) {
-                Poll.findById(poll_id, function(err, poll) {
-                    userPolls.push(poll);
-                });
-            });
+    getAllPolls:function(req,res){
+       
+        User.findOne({ _id: req.params.user_id})
+            .populate('polls')
+            .exec(function(err, user){
+                 if (err) return res.status(400).json(err);
+                 res.json(user.polls);
         });
-
-        // Poll.findById(req.params.poll_id),function(err,poll){
-        //       if (err) return res.status(400).json(req.params);
-        //       res.json(poll);
-        // }
-        res.json(userPolls);
     },
+    
     deleteAllPolls: function(req, res) {
         User.findById(req.params.user_id, function(err, user) {
             if (err) return res.status(400).json(err);

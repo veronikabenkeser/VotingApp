@@ -12,8 +12,8 @@ define(['jquery',
             'click .delete': 'deletePoll'
         },
         initialize: function() {
-            this.model.fetch();
-    this.model.bind('change', this.render, this);
+           
+            this.model.bind('change', this.render, this);
             this.render();
         },
         deletePoll: function() {
