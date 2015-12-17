@@ -4,16 +4,16 @@ define(['jquery',
     'text!src/templates/poll.html'
 ], function($, _, Backbone, pollTemplate) {
     var PollView = Backbone.View.extend({
-        tagname: 'div',
+        // tagname: 'div',
         className: 'pollContainer',
+        tagname: 'li',
         // template:_.template($('#pollTemplate').html()),
         template: _.template(pollTemplate),
         events: {
             'click .delete': 'deletePoll'
         },
         initialize: function() {
-           
-            this.model.bind('change', this.render, this);
+            this.listenTo(this.model, "change", this.render);
             this.render();
         },
         deletePoll: function() {
@@ -37,9 +37,7 @@ define(['jquery',
         },
         render: function() {
             //this.el is what we defined in tagName
-        
             this.$el.html(this.template(this.model.toJSON()));
-
             return this;
         }
     });

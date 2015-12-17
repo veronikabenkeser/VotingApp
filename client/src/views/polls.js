@@ -1,6 +1,6 @@
 define(['jquery', 'backbone', 'src/collections/polls', 'src/views/poll'], function($, Backbone, Polls, PollView) {
     var PollsView = Backbone.View.extend({
-        el: '#content',
+        // el: '#content',
         initialize: function() {
             // // this.render();
 
@@ -8,6 +8,7 @@ define(['jquery', 'backbone', 'src/collections/polls', 'src/views/poll'], functi
             this.collection.on('reset', this.render, this);
             // this.collection.on('add', this.renderPoll, this);
              this.collection.on('add', this.kop, this);
+             this.render();
         },
         events: {
             'click #add': 'addPoll'

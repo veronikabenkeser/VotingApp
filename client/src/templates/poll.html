@@ -1,7 +1,6 @@
-<ul>
-    <li>
-        <%=name%>
-    </li>
+<a href="polls/<%= _id %>">
+    <h5><%= name %></h5>
+</a>
     <% options.forEach(function(option){ %>
         <% console.log( "TEEXT" + option.text); %>
             <li>
@@ -9,6 +8,5 @@
             </li>
 
             <% }); %>
-
-</ul>
-<button class="delete btn btn-danger">Delete</button>
+            
+            <button class="delete btn btn-danger">Delete</button>

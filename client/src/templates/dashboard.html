@@ -1,0 +1,31 @@
+<div class="jumbotron">
+    
+        <h1>PollIt!</h1>
+
+
+    <% if (_id) { %>
+        <h2>Dashboard</h2>
+        <h3>What would you like to do today?</h3>
+
+        <% } %>
+
+            <div class="menu-buttons">
+
+                <% if (_id) { %>
+
+                    <a class="btn btn-large" id="add-poll" href="polls/add">New Poll</a>
+                    <a class="btn btn-large" id="mypolls" href="polls/mypolls">My Polls</a>
+                    <a class="btn btn-large" id="vote" href="polls">Vote</a>
+                <% } else { %>
+                        <a class="btn btn-large" id="vote" href="polls">Vote in a Poll</a>
+                        <a class="btn btn-large" id="add-poll" href="polls/add">Create a Poll</a>
+                <% }%>
+            </div>
+            
+        <% if ((_id)===null) { %>
+        <h1>This app does amazing things.</h1>
+        <% } %>
+
+
+<div class="page-header"></div>
+</div>

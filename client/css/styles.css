@@ -28,3 +28,35 @@ body{
 h1, h2, h3{
    text-align: center;
 }
+
+@media (min-width: 768px) {
+  .flex-group {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
+            align-items: center;
+  }
+  .form-horizontal .flex-group .control-label {
+    padding-top: 0;
+  }
+}
+
+#addPoll label{
+    text-align:center;
+    display:block;
+}
+
+.col-centered{
+    float: none;
+    margin: 0 auto;
+  
+}
+
+.help{
+    line-height:20px;
+}
+
+.login.btn, .signup.btn{
+    padding-left: 24px;
+    padding-right:24px;
+}

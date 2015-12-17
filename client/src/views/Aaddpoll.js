@@ -17,7 +17,8 @@ define(['jquery',
         template: _.template(NewpollTemplate),
         events: {
             // 'change': 'change'
-            'click .add': 'addPoll'
+            'click .add': 'addPoll',
+            'keyup input': 'validate',
 
         },
         initialize: function() {
@@ -56,8 +57,17 @@ define(['jquery',
         removeValidationErr: function(fieldName) {
             $("." + fieldName + "-error").remove();
         },
+        validate: function(){
+            var nameLength = $("#name").val();
+            var option1Length = $("#option1").val();
+            var option2Length = $("#option2").val();
+            if (nameLength && option1Length && option2Length){
+                $('button.add').prop('disabled', false);
+            } else {
+                $('button.add').prop('disabled', true);
+            }
+        },
         addPoll: function(e) {
-            console.log("ADD BUTTON CLICKED");
             e.preventDefault();
             var self = this;
 
@@ -84,11 +94,10 @@ define(['jquery',
                         data: formData
                     })
                     .done(function(response) {
-                         self.render();
-                         $('.poll-saved').show();
+                         self.showLink(poll.id);
                     })
                     .fail(function(err) {
-                          $('.poll-not-saved').show();
+                         self.showPollNotSaved();
                     });
 
             }
@@ -96,15 +105,25 @@ define(['jquery',
                 var poll = new Poll(formData);
                 poll.save(null, {
                     success: function(poll) {
-                        self.render();
-                        $('.poll-saved').show();
+                      self.showLink(poll.id);
                     },
                     error: function(err) {
-                        $('.poll-not-saved').show();
+                        self.showPollNotSaved();
                     }
                 });
 
             }
+        },
+        showLink: function(id){
+             this.render();
+             $('#add-new-poll-form-container').hide();
+             $("#poll-link").attr("href", 'polls/'+id);
+             $('#poll-link').text('https://try4-autumncat.c9users.io/polls/'+id);
+             $('.poll-saved').show();
+        },
+        showPollNotSaved:function(){
+            $('#add-new-poll-form-container').hide();
+            $('.poll-not-saved').show();
         }
     });
     return NewPollView;

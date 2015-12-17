@@ -4,19 +4,19 @@ define(['backbone',
         'src/views/polls',
         'src/views/poll',
         'src/views/Ahome',
+        'src/views/dashboard',
         'src/views/Aaddpoll',
         'src/models/poll',
         'src/models/user',
         'src/views/signup',
         'src/views/login',
-        'src/views/welcome',
         'src/views/authorizedHomepage',
         'src/views/settings',
         'eventBus',
         'app'
     ],
-    function(Backbone, Polls, PollsView, PollView, HomeView, AddPollView, Poll,
-        User, SignupView, LoginView, WelcomeView, AuthorizedHomepageView, SettingsView, EventBus, app) {
+    function(Backbone, Polls, PollsView, PollView, HomeView, DashboardView, AddPollView, Poll,
+        User, SignupView, LoginView, AuthorizedHomepageView, SettingsView, EventBus, app) {
         var AppRouter = Backbone.Router.extend({
             initialize: function() {
                 // setup the ajax links for the html5 push navigation
@@ -48,13 +48,16 @@ define(['backbone',
 
             },
             home: function() {
-                console.log("going home");
-                if (app.isAuthenticated()) {
-                    EventBus.trigger('home:displayView', new AuthorizedHomepageView());
-                }
-                else {
-                    EventBus.trigger('home:displayView', new WelcomeView());
-                }
+                // console.log("going home");
+                // if (app.isAuthenticated()) {
+                //     EventBus.trigger('home:displayView', new AuthorizedHomepageView());
+                // } 
+                var user = app.getUser();
+                console.log('here is user');
+                console.log(user);
+                EventBus.trigger('home:displayView', new DashboardView({
+                    model:user
+                }));
             },
             showSignup: function() {
                 var user = new User();
@@ -109,16 +112,28 @@ define(['backbone',
                 var poll = new Poll({
                     _id: id
                 });
-                poll.fetch({
-                    success: function() {
-                        var pollView = new PollView({
-                            model: poll
-                        });
-                        // console.log(pollView.render().el);
-                        $("#polls").html(pollView.el);
+                // poll.fetch({
+                //     success: function() {
+                //         var pollView = new PollView({
+                //             model: poll
+                //         });
+                //         // console.log(pollView.render().el);
+                //         $("#polls").html(pollView.el);
 
-                    }
-                });
+                //     }
+                // });
+                
+                poll.fetch()
+                .done(function() {
+                    console.log('poll');
+                    console.log(poll);
+                            EventBus.trigger('home:displayView', new PollView({
+                               model: poll
+                            }));
+                        })
+                        .fail(function(err) {
+                            console.log("error fetching the poll");
+                        });
             },
             showSettings: function() {
                 var user = new User();
