@@ -9,6 +9,8 @@ define(['jquery',
     var DashboardView = Backbone.View.extend({
         el: "#content",
         template: _.template(DashboardTemplate),
+        initialize:function(){
+        },
         render: function() {
             console.log('trying to render dashboard view');
             this.$el.html(this.template(this.model.toJSON()));

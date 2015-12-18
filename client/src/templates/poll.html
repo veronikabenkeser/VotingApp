@@ -3,10 +3,9 @@
 </a>
     <% options.forEach(function(option){ %>
         <% console.log( "TEEXT" + option.text); %>
-            <li>
-                <%=option.text %>
-            </li>
-
-            <% }); %>
+            <div class="radio">
+               <label><input type="radio" name="optradio"><%=option.text %></label>
+            </div>
+    <% }); %>
             
-            <button class="delete btn btn-danger">Delete</button>
+<button class="delete btn btn-danger">Delete</button>

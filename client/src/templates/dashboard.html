@@ -1,31 +1,28 @@
 <div class="jumbotron">
     
-        <h1>PollIt!</h1>
-
-
     <% if (_id) { %>
+        <h1>Let's Poll!</h1>
         <h2>Dashboard</h2>
         <h3>What would you like to do today?</h3>
 
-        <% } %>
-
-            <div class="menu-buttons">
-
+        <% } else { %>
+        <h1>Welcome to Let's Poll!</h1>
+        <h3>A sample application built with Backbone.js, Twitter Bootstrap, Node.js, Express, and MongoDB</h3>
+         <% } %>
+          </div>
+                
+             <div class = "button-container">
                 <% if (_id) { %>
+      
+                  <div class = 'cont'>
+                      <button class ="btn vote-in-a-poll btn-lg btn-success left"><a id="vote" href="polls/add">New Poll</a></button>
+                      <button class="btn vote-in-a-poll btn-lg btn-info  middle"><a id="vote" href="mypolls">My Polls</a></button>
+                      <button class="btn vote-in-a-poll btn-lg btn-success right"><a id="vote" href="polls">Vote</a></button>
+                  </div>
 
-                    <a class="btn btn-large" id="add-poll" href="polls/add">New Poll</a>
-                    <a class="btn btn-large" id="mypolls" href="polls/mypolls">My Polls</a>
-                    <a class="btn btn-large" id="vote" href="polls">Vote</a>
                 <% } else { %>
-                        <a class="btn btn-large" id="vote" href="polls">Vote in a Poll</a>
-                        <a class="btn btn-large" id="add-poll" href="polls/add">Create a Poll</a>
+                
+                    <a class="btn vote-in-a-poll btn-lg" id="vote" href="polls">Vote in a Poll</a>
+                    <a class="btn btn-success btn-lg" id="add-poll" href="polls/add">Create a Poll</a>
                 <% }%>
             </div>
-            
-        <% if ((_id)===null) { %>
-        <h1>This app does amazing things.</h1>
-        <% } %>
-
-
-<div class="page-header"></div>
-</div>

@@ -3,6 +3,7 @@ require.config({
     // baseUrl:"client",
     paths: {
         'jquery': 'libs/jquery/dist/jquery',
+        'bootstrap-js':'libs/bootstrap/dist/js/bootstrap',
         'underscore': 'libs/underscore/underscore',
         'backbone': 'libs/backbone/backbone',
         'text': 'libs/text/text',
@@ -18,6 +19,10 @@ require.config({
         'backbone-relational':{
             deps: ['underscore','backbone'],
             exports: 'backbone-relational'
+        },
+        'bootstrap-js':{
+            deps: ['jquery'],
+            exports:'bootstrap_js'
         }
         // backbone: {
         //     //These script dependencies should be loaded before loading backbone.js
@@ -50,7 +55,7 @@ require.config({
 //     });
 // });
 
-require(['jquery', 'underscore', 'backbone', 'router', 'eventBus', 'globals', 'app','backbone-relational'], function($, _, Backbone, AppRouter, EventBus, globals, app) {
+require(['jquery','bootstrap-js', 'underscore', 'backbone', 'router', 'eventBus', 'globals', 'app','backbone-relational'], function($, bootstrap_js, _, Backbone, AppRouter, EventBus, globals, app) {
     $(function() {
 
 

@@ -21,10 +21,12 @@ define(['backbone',
             initialize: function() {
                 // setup the ajax links for the html5 push navigation
                 $("body").on("click", "a:not(a[data-bypass])", function(e) {
-                    // block the default link behavior
                     e.preventDefault();
-                    // take the href of the link clicked
                     var href = $(this).attr("href");
+                    if ($(e.currentTarget).prop('target') === '_blank') {
+                        window.open(href, '_blank');
+                        return;
+                    } 
                     // pass this link to Backbone
                     Backbone.history.navigate(href, true); //routing all a href elements in links (in templates) to the backbone router.
                 });
@@ -141,8 +143,7 @@ define(['backbone',
                     EventBus.trigger('home:displayView', new SettingsView({
                         model: user
                     }));
-                }
-                else {
+                } else {
                     EventBus.trigger('home:displayView', new LoginView({
                         model: user
                     }));

@@ -42,13 +42,13 @@ define(['jquery',
             
                 if (this.contentView !== null) {
                     this.contentView.close();
-                    $('#content').empty();
+                    $('#subView').empty();
                     this.contentView = null;
                 }
                 this.contentView = view;
                 if (this.contentView) {
                     //render the view into the content div of the home div
-                    this.$el.find('#content').append(this.contentView.render().el);
+                    this.$el.find('#subView').append(this.contentView.render().el);
                 }
         }
     });
