@@ -130,7 +130,8 @@ define(['backbone',
                     console.log('poll');
                     console.log(poll);
                             EventBus.trigger('home:displayView', new PollView({
-                               model: poll
+                               model: poll,
+                               authorizedUser: app.getUser().id
                             }));
                         })
                         .fail(function(err) {
@@ -156,7 +157,8 @@ define(['backbone',
                     user.polls.fetch() //fires a GET request to 'api/users/:user_id/polls/' and fires a collection reset event
                         .done(function() {
                             EventBus.trigger('home:displayView', new PollsView({
-                                collection: user.polls
+                                collection: user.polls,
+                                authorizedUser: app.getUser().id
                             }));
                         })
                         .fail(function(err) {

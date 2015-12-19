@@ -1,7 +1,21 @@
-define(['jquery', 'backbone', 'src/collections/polls', 'src/views/poll'], function($, Backbone, Polls, PollView) {
+define(['jquery', 
+        'underscore',
+        'backbone', 
+        'src/collections/polls', 
+        'src/views/poll',
+        'text!src/templates/polls.html',
+        'text!src/templates/unauthPolls.html'
+        ], function($, _, Backbone, Polls, PollView, pollsTemplate, unauthPollsTemplate) {
+            
     var PollsView = Backbone.View.extend({
         el: '#content',
-        initialize: function() {
+        templates:{
+            authorized: _.template(pollsTemplate),
+            unauthorized: _.template(unauthPollsTemplate),
+        }, 
+        initialize: function(options) {
+               this.options = options;
+             _.bindAll(this, 'render');
             // // this.render();
 
            //this.collection is the argument inside of new PollsView({collection: ... })
@@ -13,16 +27,24 @@ define(['jquery', 'backbone', 'src/collections/polls', 'src/views/poll'], functi
         events: {
             'click #add': 'addPoll'
         },
+        render:function(){
+            if(this.options.authorizedUser){
+                this.$el.html(this.templates.authorized({polls: this.collection.toJSON()}));
+            } else {
+               this.$el.html(this.templates.unauthorized({polls: this.collection.toJSON()}));
+            }
+            return this; 
+        },
         kop:function(){
             console.log('just heard a collection add event');
         },
         //Render all polls by rendering each poll
-        render: function() {
-            this.collection.forEach(function(item) {
-                this.renderPoll(item);
-            }, this);
-            return this;
-        },
+        // render: function() {
+        //     this.collection.forEach(function(item) {
+        //         this.renderPoll(item);
+        //     }, this);
+        //     return this;
+        // },
         //Render a poll by creating a PollView and appending the element to the polls element
         renderPoll: function(item) {
             console.log('item here' +item);

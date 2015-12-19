@@ -1,0 +1,11 @@
+<h1>All Polls</h1>
+<div class="poll-list-circles-container">
+        <% _.each(polls, function(poll) { %>
+            <% var colors = ["#00c0f1", "#31F079", "#ec2426", "#ffc116", "#ADD5F7", "#7FB2F0","#4E7AC7","#A168D9","#F87789","#68D9AA","#2BD659"]; %>
+            <a href="<%='polls/'+poll._id%>">
+                 <div class ="circle-child" style = "background:<%=colors[Math.floor(Math.random() * 11)] %>;">
+                <div class = "circle-text"><%=poll.name%></div>
+                </div>
+            </a>
+         <%});%>
+</div>

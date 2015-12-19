@@ -1,3 +1,5 @@
+<div class = 'unauthorized-poll-container'>
+    
 <a href="polls/<%= _id %>">
     <h5><%= name %></h5>
 </a>
@@ -7,5 +9,9 @@
                <label><input type="radio" name="optradio"><%=option.text %></label>
             </div>
     <% }); %>
-            
-<button type="button" class="delete btn btn-danger">Delete</button>
+
+   <div><button type="button" class="poll-button btn btn-lg add-option btn-warning">Add Option</button></div>
+   <div><button type="button" class="vote btn poll-button btn-lg btn-success">Vote</button></div>
+
+</div>
+
