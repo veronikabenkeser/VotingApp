@@ -1,4 +1,3 @@
-<div class ="container outer-container">
 <div class ="container">
 
     <% if (_id) { %>
@@ -11,21 +10,20 @@
         <h3>A sample application built with Backbone.js, Twitter Bootstrap, Node.js, Express, and MongoDB</h3>
          <% } %>
                 
-             <div class = "button-container">
+             <div class = "text-center">
                 <% if (_id) { %>
       
-                  <div class = 'cont'>
-                      <a class ="dashboard-button btn btn-lg btn-success" id="vote" href="polls/add">New Poll</a>
-                      <a class="dashboard-button btn btn-lg btn-info middle"  id="vote" href="mypolls">My Polls</a>
-                      <a class="dashboard-button btn btn-lg btn-success" id="vote" href="polls">Vote</a>
-                  </div>
+                  
+                      <a class ="mod-button dashboard-button btn btn-lg btn-success" href="polls/add">New Poll</a>
+                      <a class="mod-button dashboard-button btn btn-lg btn-info"  href="mypolls">My Polls</a>
+                      <a class="mod-button dashboard-button btn btn-lg btn-success" href="polls">Vote</a>
+                
 
                 <% } else { %>
-                <div class = 'cont'>
-                   <a class="dashboard-button btn btn-lg btn-info " id="vote" href="polls">Vote in a Poll</a>
-                   <a class="dashboard-button btn btn-lg btn-success" id="add-poll" href="polls/add">Create a Poll</a>
-              </div>
+                
+                   <a class="mod-button dashboard-button btn btn-lg btn-info " href="polls">Vote in a Poll</a>
+                   <a class="mod-button dashboard-button btn btn-lg btn-success" href="polls/add">Create a Poll</a>
+            
                 <% }%>
             </div>
  </div>
-</div>

@@ -1,17 +1,10 @@
+<% if (user._id){%>
+<h1>My Polls</h1>
+<%} else {%>
+<h1>All Polls</h1>
+<%}%>
 <div class="container">
   <div class="list-group">
-        <% _.each(polls, function(poll) { %>
-    <a href="<%='polls/'+poll._id%>" class="list-group-item clearfix">
-         <span class="pull-left poll-name">
-      <span class="glyphicon glyphicon-file"></span>
-      <%=poll.name%>
-      </span>
-      <span class="pull-right">
-        <button class="btn btn-lg btn-danger">
-          <span class="glyphicon glyphicon-trash"></span>
-        </button>
-      </span>
-    </a>
-     <%});%>
-  </div>
+      
+ </div>
 </div>

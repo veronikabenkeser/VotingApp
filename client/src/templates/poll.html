@@ -1,11 +1,18 @@
-<a href="polls/<%= _id %>">
-    <h5><%= name %></h5>
-</a>
-    <% options.forEach(function(option){ %>
-        <% console.log( "TEEXT" + option.text); %>
-            <div class="radio">
-               <label><input type="radio" name="optradio"><%=option.text %></label>
-            </div>
-    <% }); %>
-            
-<button type="button" class="delete btn btn-danger">Delete</button>
+    <%if(user._id){%>
+          <a href="<%='polls/'+poll._id%>" class="list-group-item clearfix">
+         <span class="pull-left poll-name">
+      <span class="glyphicon glyphicon-file"></span>
+      <%=poll.name%>
+      </span>
+      <span class="pull-right">
+        <button class="btn btn-lg btn-danger">
+          <span class="glyphicon glyphicon-trash"></span>
+        </button>
+      </span>
+    </a>  
+      <%} else {%>
+      <a href="<%='polls/'+poll._id%>" class="list-group-item clearfix">
+         <h2><%=poll.name%></h2>
+    </a>
+    
+      <%}%>

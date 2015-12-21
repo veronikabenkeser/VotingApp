@@ -2,22 +2,18 @@ define(['jquery',
         'underscore',
         'backbone', 
         'src/collections/polls', 
-        'src/views/poll',
+        'src/views/pollDetails',
+         'src/views/poll',
         'text!src/templates/polls.html',
-        'text!src/templates/unauthPolls.html'
-        ], function($, _, Backbone, Polls, PollView, pollsTemplate, unauthPollsTemplate) {
+         'text!src/templates/poll.html'
+        ], function($, _, Backbone, Polls, PollDetailsView, PollView, pollsTemplate, pollTemplate) {
             
     var PollsView = Backbone.View.extend({
         el: '#content',
-        templates:{
-            authorized: _.template(pollsTemplate),
-            unauthorized: _.template(unauthPollsTemplate),
-        }, 
-        initialize: function(options) {
-               this.options = options;
+        template: _.template(pollsTemplate),
+        initialize: function(opts) {
+             this.opts=opts;
              _.bindAll(this, 'render');
-            // // this.render();
-
            //this.collection is the argument inside of new PollsView({collection: ... })
             this.collection.on('reset', this.render, this);
             // this.collection.on('add', this.renderPoll, this);
@@ -27,14 +23,36 @@ define(['jquery',
         events: {
             'click #add': 'addPoll'
         },
-        render:function(){
-            if(this.options.authorizedUser){
-                this.$el.html(this.templates.authorized({polls: this.collection.toJSON()}));
-            } else {
-               this.$el.html(this.templates.unauthorized({polls: this.collection.toJSON()}));
-            }
-            return this; 
-        },
+        
+        
+        // render:function(){
+        //     if(this.options.authorizedUser){
+        //     this.$el.html(this.templates.authorized({polls: this.collection.toJSON()}));
+          
+        //     } else {
+        //       this.$el.html(this.templates.unauthorized({polls: this.collection.toJSON()}));
+            
+        //     }
+        //     return this; 
+        // },
+        render: function(){
+        // this.$el.append("<h1>All Polls</h1>");
+        this.$el.html(this.template({user:this.opts.user.toJSON()}));
+        this.collection.forEach(function(item){
+            this.renderPoll(item);
+        },this);
+        return this;
+    },
+    //Render a poll by creating a PollView and appending the element to the polls element
+  renderPoll: function(item){
+      var pollView = new PollView({
+          model: item,
+          user:this.opts.user
+      });
+      this.$el.find(".list-group").append(pollView.render().el);
+    // this.$el.html(pollView.render().el);
+      return this;
+  },
         kop:function(){
             console.log('just heard a collection add event');
         },
@@ -46,15 +64,15 @@ define(['jquery',
         //     return this;
         // },
         //Render a poll by creating a PollView and appending the element to the polls element
-        renderPoll: function(item) {
-            console.log('item here' +item);
-                var pollView = new PollView({
-                    model: item
-                });
-                this.$el.append(pollView.render().el);
-                // this.$el.html(pollView.render().el);
-                return this;
-            }
+        // renderPoll: function(item) {
+        //     console.log('item here' +item);
+        //         var pollView = new PollView({
+        //             model: item
+        //         });
+        //         this.$el.append(pollView.render().el);
+        //         // this.$el.html(pollView.render().el);
+        //         return this;
+        //     }
             //   addPoll: function(e){
             //       e.preventDefault();
             //       var formData ={};

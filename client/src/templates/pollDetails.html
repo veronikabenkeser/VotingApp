@@ -1,0 +1,38 @@
+<a href="polls/<%= poll._id %>">
+    <h5 class ="text-center"><%= poll.name %></h5>
+    <h5 class ="text-center"><%= user.email %></h5>
+</a>
+<div style="display:flex;justify-content:center;align-items:center;">
+    <div>
+        <table class="table">
+            <tbody>
+
+                <%var count=-1;%>
+                    <% poll.options.forEach(function(option){ %>
+                        <% console.log( "TEEXT" + option.text); %>
+                            <%count++;%>
+                                <tr>
+                                    <td>
+                                        <input type="radio" name="items" value="option<%=count%>">
+                                    </td>
+                                    <td>
+                                        <%=option.text %>
+                                    </td>
+                                </tr>
+                                <% }); %>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+<%if(user._id){ %>
+    <div class="text-center">
+        <button type="button" class="poll-button delete btn btn-danger">Delete</button>
+    </div>
+    <%} %>
+        <div class="text-center">
+            <button type="button" class="poll-button btn btn-lg add-option btn-warning">Add Option</button>
+        </div>
+        <div class="text-center">
+            <button type="button" class="vote btn poll-button btn-lg btn-success">Vote</button>
+        </div>

@@ -2,7 +2,7 @@
 define(['backbone',
         'src/collections/polls',
         'src/views/polls',
-        'src/views/poll',
+        'src/views/pollDetails',
         'src/views/Ahome',
         'src/views/dashboard',
         'src/views/Aaddpoll',
@@ -15,7 +15,7 @@ define(['backbone',
         'eventBus',
         'app'
     ],
-    function(Backbone, Polls, PollsView, PollView, HomeView, DashboardView, AddPollView, Poll,
+    function(Backbone, Polls, PollsView, PollDetailsView, HomeView, DashboardView, AddPollView, Poll,
         User, SignupView, LoginView, AuthorizedHomepageView, SettingsView, EventBus, app) {
         var AppRouter = Backbone.Router.extend({
             initialize: function() {
@@ -86,12 +86,14 @@ define(['backbone',
             },
             showPolls: function() {
                 var polls = new Polls();
+                //   var user = app.getUser();
                 polls.url = '/api/polls/';
                 //populate collection from server
                 polls.fetch() //fires a GET request to 'api/polls/' and fires a collection reset event
                     .done(function() {
                         EventBus.trigger('home:displayView', new PollsView({
-                            collection: polls
+                            collection: polls,
+                            user: new User()
                         }));
                     })
                     .fail(function(err) {
@@ -129,9 +131,9 @@ define(['backbone',
                 .done(function() {
                     console.log('poll');
                     console.log(poll);
-                            EventBus.trigger('home:displayView', new PollView({
+                            EventBus.trigger('home:displayView', new PollDetailsView({
                                model: poll,
-                               authorizedUser: app.getUser().id
+                               user: app.getUser()
                             }));
                         })
                         .fail(function(err) {
@@ -158,7 +160,7 @@ define(['backbone',
                         .done(function() {
                             EventBus.trigger('home:displayView', new PollsView({
                                 collection: user.polls,
-                                authorizedUser: app.getUser().id
+                                user: user
                             }));
                         })
                         .fail(function(err) {

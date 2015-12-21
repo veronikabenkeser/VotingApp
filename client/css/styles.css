@@ -3,21 +3,11 @@ html {
     min-height: 100%;
 }
 
-.outer-container {
- min-height: 100%;
-  display: flex;
-  align-items: center;
-  background-color:#428bca;
-  /*padding-bottom:40px;*/
-  /*padding-top:40px;*/
-}
-
-
 body {
   color:black;
   margin-bottom: 60px;
   background-color:#eeeeee;
-  text-align:center;
+   /* text-align:center;  */
   height:100%;
 }
 footer {
@@ -29,12 +19,6 @@ footer {
      overflow:hidden;
 }
 
-/*.cont{*/
-/*  width:100%;*/
-/*  display: flex;*/
-/*  justify-content: center;*/
-/*  flex-flow: row wrap;*/
-/*}*/
 #form-error{
     background-color:pink;
     height:200px;
@@ -170,7 +154,8 @@ h1, h2, h3{
 /*.button-container{*/
    /*text-align: center;*/
 /*  display: flex;*/
-/*  justify-content: space-around;*/
+/*  justify-
+ent: space-around;*/
 /*  flex-wrap: wrap;*/
 /*}*/
 
@@ -188,21 +173,23 @@ h1, h2, h3{
 
 .cont {width:100%;}
 
-.dashboard-button {max-width:150px;width:100%;}
 .poll-button {
-  max-width:150px;
-  width:100%;
+  max-width:120px;
+ width:100%;
   margin:5px;
 }
 
-.unauthorized-poll-button-container{
-   display:block;
+
+.mod-button{
+   max-width:150px;
+ width:100%;
 }
 
 .button-container{
   display: flex;
   justify-content: space-between;
   flex-flow: row wrap;
+  
 }
 
 .footer-button.twitter:before{
@@ -232,102 +219,18 @@ ul,li{
   line-height:48px;
 }
 
-.poll-list-circles-container{
-  /*display: flex;*/
-  /*flex-flow: row wrap;*/
-  /*justify-content: space-around;*/
-  padding: 0;
-  margin: 0;
-  list-style: none;
-  
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-  -webkit-flex-flow: row wrap;
-  justify-content: space-around;
-}
-
-.circle-child{
-  padding: 5px;
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  margin: 10px;
-  overflow:hidden;
-  display: table; 
-}
-
-.circle-text{
-   display: table-cell; 
-   vertical-align: middle; 
-   text-align: center; 
-   margin:8px;
-   font-size:14px;
-   color:black;
-}
-
 a, a:focus, a:hover{
 text-decoration: none;
 }
 
-
-/* hide input */
-input.radio:empty {
-	margin-left: -999px;
+.text-center{
+   text-align:center;
 }
 
-/* style label */
-input.radio:empty ~ label {
-	position: relative;
-	float: left;
-	line-height: 2.5em;
-	text-indent: 3.25em;
-	margin-top: 2em;
-	cursor: pointer;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-}
-
-input.radio:empty ~ label:before {
-	position: absolute;
-	display: block;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	content: '';
-	width: 2.5em;
-	background: #D1D3D4;
-	border-radius: 3px 0 0 3px;
-}
-
-/* toggle hover */
-input.radio:hover:not(:checked) ~ label:before {
-	content:'\2714';
-	text-indent: .9em;
-	color: #C2C2C2;
-}
-
-input.radio:hover:not(:checked) ~ label {
-	color: #888;
-}
-
-/* toggle on */
-input.radio:checked ~ label:before {
-	content:'\2714';
-	text-indent: .9em;
-	color: #9CE2AE;
-	background-color: #4DCB6D;
-}
-
-input.radio:checked ~ label {
-	color: #777;
-}
-
-/* radio focus */
-input.radio:focus ~ label:before {
-	box-shadow: 0 0 0 3px #999;
-}
+.table th, .table td{ 
+     border-top: none !important; 
+ }
+ 
+ div.table-responsive{
+      border:none;
+ }
