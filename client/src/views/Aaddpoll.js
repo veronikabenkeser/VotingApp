@@ -17,54 +17,34 @@ define(['jquery',
         template: _.template(NewpollTemplate),
         events: {
             // 'change': 'change'
-            'click .add': 'addPoll',
+            'click #submit': 'addPoll',
+            'click #add-option': 'addOption',
             'keyup input': 'validate',
 
         },
         initialize: function() {
+             EventBus.on('savePoll', this.savePoll, this);
             //   this.render();
         },
 
         render: function() {
             //this.el is what we defined in tagName
-            $(this.el).html(this.template(this.model.toJSON()));
-            //  this.$el.html( this.template( this.model.toJSON()) );
+            this.$el.html(this.template(this.model.toJSON()));
             return this;
         },
-        // change: function(e) {
-        //     console.log("CHANGE!");
-
-        //     //Apply changes to the model
-        //     var fieldName = e.target.id;
-        //     var fieldValue = e.target.value;
-        //     //change a property inside of the model
-        //     this.model.set(fieldName, fieldValue);
-
-        //     var inputcheck = this.model.validateField(e.target.id);
-        //     if (inputcheck.isValid) {
-        //         this.removeValidationErr(fieldName);
-        //     }
-        //     else {
-        //         this.displayValidationErr(fieldName, inputcheck.message);
-        //     }
-        // },
-        displayValidationErr: function(fieldName, message) {
-            //display the error message above the field
-            var validationErr = $('<div>' + message + '</div>');
-            validationErr.addClass(fieldName + '-error');
-            $('#form-error').append(validationErr);
-        },
-        removeValidationErr: function(fieldName) {
-            $("." + fieldName + "-error").remove();
+        
+         addOption:function(){
+            var field = '<div class="form-group"><input class="form-control options" type="text" /></div>';
+            $('#addPoll').append(field);
         },
         validate: function(){
             var nameLength = $("#name").val();
             var option1Length = $("#option1").val();
             var option2Length = $("#option2").val();
             if (nameLength && option1Length && option2Length){
-                $('button.add').prop('disabled', false);
+                $('button#submit').prop('disabled', false);
             } else {
-                $('button.add').prop('disabled', true);
+                $('button#submit').prop('disabled', true);
             }
         },
         addPoll: function(e) {
@@ -78,44 +58,55 @@ define(['jquery',
 
             $('#addPoll .options').each(function(index, opt) {
                 var val = $(opt).val();
+                if(val){
                 formData.options.push({
                     'text': val,
                     'votes': 0
                 });
+                }
             });
 
-            //If a user is signed in, get the user's id and add this poll to the user's profile
-            var currentUser = app.getUser();
-            // if (currentUser && currentUser.id) {
-
-                $.ajax({
-                        url: '/api/users/' + currentUser.id + '/polls',
+            //If a user is signed in, add the poll to the user's profile
+            //If the user is no longer signed in, save the poll in local storage and redirect to log in screen
+          
+                self.savePoll(formData, app.getUser().id);
+            
+        },
+        saveLocally:function(formData){
+            saveInStorage(formData, function(){
+                // EventBus.trigger('router:navigate', {
+	               //         route: 'login',
+	               //         options: {
+	               //             trigger: true
+	               //         }
+	               //     });
+	               
+            });
+            
+            function saveInStorage(formData, callback){
+                 EventBus.trigger("app:recordPoll", formData);
+                 console.log('before callback');
+                 callback();
+            }
+        },
+        savePoll:function(formData, userId){
+            console.log("SAVE POLL EVENT TRIGGERED");
+            var self = this;
+             $.ajax({
+                        url: '/api/users/' + userId + '/polls',
                         type: 'POST',
                         dataType: "json",
                         data: formData
                     })
                     .done(function(poll) {
-                        console.log('response:: ');
-                        console.log(poll);
-                         self.showLink(poll.slug);
+                        self.showLink(poll.slug);
                     })
                     .fail(function(err) {
+                       console.log(err);
+                       self.saveLocally(formData);
                          self.showPollNotSaved();
+                         
                     });
-
-            // }
-            // else {
-            //     var poll = new Poll(formData);
-            //     poll.save(null, {
-            //         success: function(poll) {
-            //           self.showLink(poll.id);
-            //         },
-            //         error: function(err) {
-            //             self.showPollNotSaved();
-            //         }
-            //     });
-
-            // }
         },
         showLink: function(slug){
              this.render();

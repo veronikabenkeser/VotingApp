@@ -5,10 +5,11 @@ define(['jquery',
     'backbone',
     'src/collections/users',
     'eventBus',
-    'globals'
+    'globals',
+    'app'
     // 'backbone-validation',
 
-], function($, _, User, LoginTemplate, Backbone, Users, EventBus, globals) {
+], function($, _, User, LoginTemplate, Backbone, Users, EventBus, globals,app) {
 
     var LoginView = Backbone.View.extend({
         // tagName: 'div',
@@ -39,7 +40,12 @@ define(['jquery',
                 })
                 .done(function(response) {
                     EventBus.trigger("app:authenticated", response);
-
+                    var unsavedPoll=app.getUnsavedPoll();
+                    if(unsavedPoll){
+                    self.savePollFromStorage(unsavedPoll, app.getUser().id);
+                    } else {
+                         EventBus.trigger("app:goHome");
+                    }
                 })
                 //  .fail(function(jqXHr, textStatus, errorThrown){
                 .fail(function(response) {
@@ -48,6 +54,14 @@ define(['jquery',
                     self.$('.alert-warning').text(response.message).show();
 
                 });
+        },
+        savePollFromStorage:function(poll, userId){
+            console.log("TRYING TO SAVE POLL FROM STORAGE");
+            console.log('poll'+poll);
+            console.log('user id '+ userId);
+            if(poll && userId){
+                EventBus.trigger('savePoll', poll, userId);
+            }
         },
 
         // this.validateFormat();

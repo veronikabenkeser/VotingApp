@@ -72,6 +72,9 @@ module.exports = {
             var poll = new Poll();
             poll.name= req.body.name;
             poll.options = [];
+            console.log('here is the request body');
+            console.log(req.body);
+            
             req.body.options.forEach(function(opt){
                 
                 var option = new Option(opt);
