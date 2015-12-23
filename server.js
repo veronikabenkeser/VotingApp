@@ -4,6 +4,7 @@ var express = require('express');
 var bodyParser = require("body-parser");
 var morgan = require("morgan");
 var mongoose  = require("mongoose");
+var friendly = require('mongoose-friendly');
 var User = require("./app/models/user");
 var Poll = require("./app/models/poll");
 var jwt = require("jsonwebtoken");

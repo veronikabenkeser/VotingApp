@@ -79,13 +79,14 @@ define(['jquery',
             $('#addPoll .options').each(function(index, opt) {
                 var val = $(opt).val();
                 formData.options.push({
-                    'text': val
+                    'text': val,
+                    'votes': 0
                 });
             });
 
             //If a user is signed in, get the user's id and add this poll to the user's profile
             var currentUser = app.getUser();
-            if (currentUser && currentUser.id) {
+            // if (currentUser && currentUser.id) {
 
                 $.ajax({
                         url: '/api/users/' + currentUser.id + '/polls',
@@ -93,36 +94,40 @@ define(['jquery',
                         dataType: "json",
                         data: formData
                     })
-                    .done(function(response) {
-                         self.showLink(poll.id);
+                    .done(function(poll) {
+                        console.log('response:: ');
+                        console.log(poll);
+                         self.showLink(poll.slug);
                     })
                     .fail(function(err) {
                          self.showPollNotSaved();
                     });
 
-            }
-            else {
-                var poll = new Poll(formData);
-                poll.save(null, {
-                    success: function(poll) {
-                      self.showLink(poll.id);
-                    },
-                    error: function(err) {
-                        self.showPollNotSaved();
-                    }
-                });
+            // }
+            // else {
+            //     var poll = new Poll(formData);
+            //     poll.save(null, {
+            //         success: function(poll) {
+            //           self.showLink(poll.id);
+            //         },
+            //         error: function(err) {
+            //             self.showPollNotSaved();
+            //         }
+            //     });
 
-            }
+            // }
         },
-        showLink: function(id){
+        showLink: function(slug){
              this.render();
-             $('#add-new-poll-form-container').hide();
-             $("#poll-link").attr("href", 'polls/'+id);
-             $('#poll-link').text('https://try4-autumncat.c9users.io/polls/'+id);
+             $('#add-poll-form').hide();
+             var link = 'https://try4-autumncat.c9users.io/polls/'+slug;
+             $("#poll-link").attr("href", link);
+             $('.twitter-share-button').attr('data-url',link)
+             $('#poll-link').text(link);
              $('.poll-saved').show();
         },
         showPollNotSaved:function(){
-            $('#add-new-poll-form-container').hide();
+            $('#add-poll-form').hide();
             $('.poll-not-saved').show();
         }
     });

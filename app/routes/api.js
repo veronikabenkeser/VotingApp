@@ -14,10 +14,6 @@ module.exports = function(app, express) {
     apiRouter.route('/polls')
         .get(function(req, res) {
             polls.getAllPolls(req, res);
-        })
-        .post(function(req, res) {
-            console.log("PRE REQ "+ req.body)
-            polls.addPoll(req, res);
         });
 
 
@@ -34,12 +30,6 @@ apiRouter.route('/options/:option_id')
     apiRouter.route('/polls/:poll_id')
         .get(function(req, res) {
             polls.getById(req, res);
-        })
-        .post(function(req, res) {
-            polls.modifyPoll(req, res);
-        })
-        .delete(function(req, res) {
-            polls.deletePoll(req, res);
         });
 
     apiRouter.route('/users')
@@ -148,7 +138,14 @@ apiRouter.route('/options/:option_id')
             });
         }
     });
-
+    
+    
+    apiRouter.route('/polls/:poll_id')
+        .put(function(req,res){
+            polls.modifyPoll(req,res)
+        });
+        
+    
     //View, update or delete an existing user account
     apiRouter.route('/users/:user_id')
         .get(function(req, res) {
@@ -157,7 +154,7 @@ apiRouter.route('/options/:option_id')
         .put(function(req,res){
              users.changeSettings(req,res);
         })
-        .delete(function(req, res) {
+        .delete(function(req, res) { 
             users.deleteUser(req, res);
         });
 

@@ -1,5 +1,6 @@
 var User = require('../models/user');
 var Poll = require("../models/poll");
+var Option = require("../models/option");
 var config = require('../../config/server');
 var superSecret = config.secret;
 var jwt = require('jsonwebtoken');
@@ -67,8 +68,22 @@ module.exports = {
     addPoll: function(req, res) {
         User.findById(req.params.user_id, function(err, user) {
             if (err) return res.status(400).json(err);
-            console.log('about to create poll');
-            var poll = new Poll(req.body);
+            
+            var poll = new Poll();
+            poll.name= req.body.name;
+            poll.options = [];
+            req.body.options.forEach(function(opt){
+                
+                var option = new Option(opt);
+                option.save(function(err,option){
+                    if(err) return res.status(400).json(err);
+                    poll.options.push(option);
+                });
+                // poll.options.push(option);
+            });
+            
+            // var poll = new Poll(req.body);
+           
             // var generalPollCollection = new Polls(null, {url:'/api/polls/'});
              
             //user.polls is the User's Polls Collection
@@ -81,10 +96,10 @@ module.exports = {
                 
                 poll.save(function(err, poll) {
                     if (err) return res.status(500).json(err);
-              
+                    res.json(poll);
                 });
                 
-                 res.json(user);
+                //  res.json(user);
             });
         });
     },

@@ -11,7 +11,7 @@ define(['underscore', 'backbone','src/collections/options'], function(_, Backbon
             // options:[]
            
         // },
-        
+    
         // relations: [{
         //     type: Backbone.HasMany,
         //     key: 'options',

@@ -17,6 +17,8 @@
     "express": "^4.13.3",
     "jsonwebtoken": "^5.4.1",
     "mongoose": "^4.2.6",
+    "mongoose-friendly": "^0.1.4",
+    "mongoose-slug-generator": "^1.0.2",
     "morgan": "^1.6.1",
     "nodemon": "^1.8.1",
     "passport": "^0.3.2",

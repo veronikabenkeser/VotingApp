@@ -1,20 +1,18 @@
-<!--<form id="addPoll" action ="#add">-->
-<div id= 'add-new-poll-form-container'>
-<h1>Add a new poll here:</h1>
-<div id='form-error'></div>
+<div id= "add-poll-form">
+<h1>New Poll</h1>
 <form id="addPoll" class="col-xs-10 col-lg-6 col-md-8 col-sm-6 col-centered" style="text-align:center;">
     <div class="form-group">
-        <label for="name">Name of the poll</label>
-        <input id="name" class="form-control"  type="text" value="<%= name %>" autofocus />
+        <label for="name">Name of the Poll</label>
+        <input id="name" class="form-control"  type="text" value="<%= name %>" placeholder="What is your favorite soda?" autofocus />
     </div>
     
     <div class="form-group">
         <label class="control-label">Options</label>
-        <input id="option1" class="form-control options"  type="text" />
+        <input id="option1" class="form-control options" placeholder="Coke" type="text" />
     </div>
     
     <div class="form-group">
-        <input id="option2"  class="form-control options"  type="text" />
+        <input id="option2"  class="form-control options" placeholder="Pepsi" type="text" />
     </div>
     
     
@@ -25,12 +23,17 @@
 </form>
 </div>
 
-<div class="status-bar col-xs-6 col-lg-6 col-md-8 col-sm-6 col-centered">
+<script src="https://platform.twitter.com/widgets.js"></script>
+
+<div style="margin-left:20px;margin-right:20px;">
         <div class="poll-saved" style="display: none">
-          <h1>Congratulations!</h1>
-          <h2>Your poll has been posted to</h2>
-          <div class ="link"><a id = "poll-link" href="#"></a></div>
-        </div>
+              <h1>Congratulations!</h1>
+              <h2>Your poll has been posted to</h2>
+              <div class ="link text-center">
+                 <div><a id = "poll-link" href="#"  target="_blank"></a></div>
+                <div style="margin-top:20px;"><a href="https://twitter.com/share" class="tw twitter-share-button"{count} data-url="" data-text="Cast Your Vote at" data-size="large">Tweet</a></div>
+            </div>
+</div>
         
          <div class="poll-not-saved" style="display: none">
              <h3>An error occurred while trying to delete this item</h3>

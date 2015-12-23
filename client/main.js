@@ -7,6 +7,8 @@ require.config({
         'underscore': 'libs/underscore/underscore',
         'backbone': 'libs/backbone/backbone',
         'text': 'libs/text/text',
+        // 'chart-js': 'libs/Chart.js/Chart',
+        'chart-js': 'libs/Chart.js/Chart.min',
         'backbone-relational':'libs/backbone-relational/backbone-relational'
             // 'backbone-validation':'libs/backbone.validation/dist/backbone-validation'
             // 'bootstrap': "libs/bootstrap/dist/css/bootstrap.min"
@@ -23,7 +25,12 @@ require.config({
         'bootstrap-js':{
             deps: ['jquery'],
             exports:'bootstrap_js'
+        },
+        'chart-js':{
+            exports: 'Chart'
         }
+        
+        
         // backbone: {
         //     //These script dependencies should be loaded before loading backbone.js
         //     deps: ['underscore', 'jquery'],
@@ -55,7 +62,7 @@ require.config({
 //     });
 // });
 
-require(['jquery','bootstrap-js', 'underscore', 'backbone', 'router', 'eventBus', 'globals', 'app','backbone-relational'], function($, bootstrap_js, _, Backbone, AppRouter, EventBus, globals, app) {
+require(['jquery','bootstrap-js', 'underscore', 'backbone', 'router', 'eventBus', 'globals', 'app', 'chart-js'], function($, bootstrap_js, _, Backbone, AppRouter, EventBus, globals, app, Chart) {
     $(function() {
 
 
