@@ -55,7 +55,7 @@ define(['jquery',
   },
         kop:function(){
             console.log('just heard a collection add event');
-        },
+        }
         //Render all polls by rendering each poll
         // render: function() {
         //     this.collection.forEach(function(item) {

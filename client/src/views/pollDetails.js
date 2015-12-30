@@ -3,8 +3,11 @@ define(['jquery',
     'backbone',
     'text!src/templates/pollDetails.html',
      'text!src/templates/pollChart.html',
-     'chart-js'
-], function($, _, Backbone, pollDetailsTemplate, ChartTemplate,Chart) {
+     'chart-js',
+     'src/views/chart',
+     'eventBus',
+     'src/models/poll'
+], function($, _, Backbone, pollDetailsTemplate, ChartTemplate,Chart,ChartView,EventBus,Poll) {
     var PollDetailsView = Backbone.View.extend({
         el:'#content',
         templates:{
@@ -22,6 +25,7 @@ define(['jquery',
             this.listenTo(this.model, "change", this.render);
             this.render();
         },
+        
         addOption:function(){
             var button = '<td class ="voting-options"><input type="radio" class ="new-items" name="items" value=""></td>';
             var field =' <td style="font-size:16px;">'+'<input type="text" name="new-option">'+'</td>';
@@ -86,7 +90,8 @@ define(['jquery',
                     })
                     .done(function(poll) {
                         //server responds with a populated poll
-                        self.showChart(poll);
+                        var p = new Poll(poll);
+                        self.showChart(p);
                     })
                     .fail(function(err) {
                         //self.showPollNotSaved();
@@ -101,7 +106,12 @@ define(['jquery',
             }
             return color;
         },
-        showChart:function(poll){
+        showChart: function(poll){
+            EventBus.trigger('home:displayView', new ChartView({
+                    model:poll
+                }));
+        },
+        showChart0:function(poll){
             var self =this;
             var data=[];
             poll.options.forEach(function(option){ 

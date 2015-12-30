@@ -13,7 +13,6 @@ define(['jquery',
     var NewPollView = Backbone.View.extend({
         tagname: 'div',
         className: 'pollContainer',
-        // template:_.template($('#pollTemplate').html()),
         template: _.template(NewpollTemplate),
         events: {
             // 'change': 'change'
@@ -50,7 +49,6 @@ define(['jquery',
         addPoll: function(e) {
             e.preventDefault();
             var self = this;
-
             var formData = {};
             formData.name = $('#addPoll #name').val();
             formData.options = [];
@@ -73,21 +71,7 @@ define(['jquery',
             
         },
         saveLocally:function(formData){
-            saveInStorage(formData, function(){
-                // EventBus.trigger('router:navigate', {
-	               //         route: 'login',
-	               //         options: {
-	               //             trigger: true
-	               //         }
-	               //     });
-	               
-            });
-            
-            function saveInStorage(formData, callback){
-                 EventBus.trigger("app:recordPoll", formData);
-                 console.log('before callback');
-                 callback();
-            }
+           EventBus.trigger("app:recordPoll", formData);
         },
         savePoll:function(formData, userId){
             console.log("SAVE POLL EVENT TRIGGERED");
@@ -100,6 +84,8 @@ define(['jquery',
                     })
                     .done(function(poll) {
                         self.showLink(poll.slug);
+                        //clear poll from local storage
+                        app.deleteLocalPoll();
                     })
                     .fail(function(err) {
                        console.log(err);
@@ -109,6 +95,13 @@ define(['jquery',
                     });
         },
         showLink: function(slug){
+             EventBus.trigger('router:navigate', {
+                        route: 'polls/add',
+                        options: {
+                            trigger: true
+                        }
+                    });
+          
              this.render();
              $('#add-poll-form').hide();
              var link = 'https://try4-autumncat.c9users.io/polls/'+slug;

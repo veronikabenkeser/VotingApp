@@ -15,6 +15,11 @@ module.exports = function(app, express) {
         .get(function(req, res) {
             polls.getAllPolls(req, res);
         });
+        
+    apiRouter.route('/polls/:poll_id')
+        .get(function(req, res) {
+            polls.getById(req, res);
+        });
 
 
 apiRouter.route('/options/:option_id')
@@ -25,13 +30,8 @@ apiRouter.route('/options/:option_id')
             res.json(option);
 
         });
-        });
-        
-    apiRouter.route('/polls/:poll_id')
-        .get(function(req, res) {
-            polls.getById(req, res);
-        });
-
+});
+    
     apiRouter.route('/users')
         .post(function(req, res) {
             users.addUser(req, res);
@@ -42,8 +42,6 @@ apiRouter.route('/options/:option_id')
 
     //Authenticating Users
     apiRouter.post('/authenticate', function(req, res) {
-        // apiRouter.post('/login',function(req,res){
-        //find the user
         //select the name,email, and password explicitly
         User.findOne({
             email: req.body.email
@@ -93,15 +91,9 @@ apiRouter.route('/options/:option_id')
     //Route middleware to verify a token
     //Since the pathh is omitted here. the path is "/" by default. This middleware will
     //be fired every time the user is at ../api..
-    //Users are required to have a token to access apiRouter's endpoints(/api/...)
-    //-- api USer tOKEN
 
     apiRouter.use(function(req, res, next) {
-
-        console.log("CHECK");
-
-        //Check post params,url params,  or header params for token
-
+        //Check POST params, url params, or header params for token
         //URL parameters are what follows '?'' here:
         //http://example.com/api/users?id=4&token=sdfa3&geo=us
         //URL Parameters are grabbed using req.param.variable_name
@@ -140,11 +132,10 @@ apiRouter.route('/options/:option_id')
     });
     
     
-    apiRouter.route('/polls/:poll_id')
+     apiRouter.route('/polls/:poll_id')
         .put(function(req,res){
             polls.modifyPoll(req,res)
         });
-        
     
     //View, update or delete an existing user account
     apiRouter.route('/users/:user_id')
@@ -162,9 +153,6 @@ apiRouter.route('/options/:option_id')
     apiRouter.route('/users/:user_id/polls')
         .post(function(req, res) {
             users.addPoll(req, res);
-        })
-        .delete(function(req, res) {
-            users.deleteAllPolls(req, res);
         })
         .get(function(req,res){
             users.getAllPolls(req,res);

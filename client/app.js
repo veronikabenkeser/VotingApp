@@ -81,17 +81,23 @@ define([
             }
         });
     }
+    
+    function deleteLocalPoll(){
+        window.localStorage.removeItem(globals.extraInfo.unsavedPoll);
+    }
 
     EventBus.on("app:authenticated", authenticated, this);
     EventBus.on("app:logout", logOut);
     EventBus.on("app:recordPoll", savePollInLocalStorage,this);
     EventBus.on("app:goHome",goHome);
+
     return {
         isAuthenticated: isAuthenticated,
         initializeUser: initializeUser,
         getUser: getUser,
         logOut: logOut,
-        getUnsavedPoll: getUnsavedPoll
+        getUnsavedPoll: getUnsavedPoll,
+        deleteLocalPoll: deleteLocalPoll
     };
 
 });

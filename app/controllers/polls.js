@@ -121,6 +121,8 @@ module.exports = {
     });
     },
     deletePoll: function(req, res) {
+        
+        
         Poll.remove({
             _id: req.params.poll_id
         }, function(err, poll) {

@@ -1,15 +1,19 @@
     <%if(user._id){%>
-          <a href="<%='polls/'+poll._id%>" class="list-group-item clearfix">
+          <!--<a href="<%='polls/'+poll._id+'/results'%>" class="list-group-item clearfix">-->
+           <div class="list-group-item clearfix">
+             <div id ="view-results">
          <span class="pull-left poll-name">
       <span class="glyphicon glyphicon-file"></span>
       <%=poll.name%>
       </span>
+      </div>
       <span class="pull-right">
-        <button class="btn btn-lg btn-danger">
+        <button id="delete-poll" class="btn btn-lg btn-danger">
           <span class="glyphicon glyphicon-trash"></span>
         </button>
       </span>
-    </a>  
+    <!--</a>  -->
+    </div>
       <%} else {%>
       <a href="<%='polls/'+poll._id%>" class="list-group-item clearfix">
          <h2><%=poll.name%></h2>

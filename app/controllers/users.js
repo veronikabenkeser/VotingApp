@@ -66,6 +66,7 @@ module.exports = {
         });
     },
     addPoll: function(req, res) {
+        console.log("IN ADD POLL");
         User.findById(req.params.user_id, function(err, user) {
             if (err) return res.status(400).json(err);
             
@@ -136,6 +137,10 @@ module.exports = {
         });
     },
     deletePoll: function(req, res) {
+        
+         console.log("IN DELETE POLL");
+         
+         
         User.findById(req.params.user_id, function(err, user) {
             if (err) return res.status(400).json(err);
 

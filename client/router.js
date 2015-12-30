@@ -6,6 +6,7 @@ define(['backbone',
         'src/views/Ahome',
         'src/views/dashboard',
         'src/views/Aaddpoll',
+        'src/views/chart',
         'src/models/poll',
         'src/models/user',
         'src/views/signup',
@@ -15,7 +16,7 @@ define(['backbone',
         'eventBus',
         'app'
     ],
-    function(Backbone, Polls, PollsView, PollDetailsView, HomeView, DashboardView, AddPollView, Poll,
+    function(Backbone, Polls, PollsView, PollDetailsView, HomeView, DashboardView, AddPollView, ChartView, Poll,
         User, SignupView, LoginView, AuthorizedHomepageView, SettingsView, EventBus, app) {
         var AppRouter = Backbone.Router.extend({
             initialize: function() {
@@ -45,6 +46,7 @@ define(['backbone',
                 "signup": "showSignup",
                 "polls/add": "addPoll",
                 "polls/:id": "pollDetails",
+                "polls/:id/results": 'pollResults',
                 "mypolls": "showMyPolls",
                 "settings": "showSettings"
 
@@ -139,6 +141,21 @@ define(['backbone',
                         .fail(function(err) {
                             console.log("error fetching the poll");
                         });
+            },
+            pollResults:function(id){
+                var poll= new Poll({
+                    _id: id
+                });
+                poll.fetch()
+                    .done(function(){
+                          EventBus.trigger('home:displayView', new ChartView({
+                               model: poll
+                            }));
+                    })
+                    .fail(function(err){
+                         console.log("error fetching the poll");
+                        
+                    });
             },
             showSettings: function() {
                 var user = new User();
