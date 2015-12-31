@@ -103,7 +103,6 @@ require(['jquery','bootstrap-js', 'underscore', 'backbone', 'router', 'eventBus'
         $.ajaxSetup({
             statusCode: {
                 401: function(context) {
-                    console.log("ajax handler inside of app.js - 401 Error Received");
                     EventBus.trigger('router:navigate', {
                         route: 'login',
                         options: {
@@ -114,8 +113,7 @@ require(['jquery','bootstrap-js', 'underscore', 'backbone', 'router', 'eventBus'
                 },
                 //when token has expired
                 403: function(context){
-                    console.log('your token has expired');
-                     EventBus.trigger("app:logout");
+                    EventBus.trigger("app:logout");
                     EventBus.trigger('router:navigate', {
                         route: 'login',
                         options:{
@@ -129,16 +127,14 @@ require(['jquery','bootstrap-js', 'underscore', 'backbone', 'router', 'eventBus'
             //of the AJAX calls.
             //before ajax req is sent to api links
             beforeSend: function(xhr) {
-                console.log('beforesend');
                 var token = window.localStorage.getItem(globals.auth.TOKEN_KEY);
-                console.log('set token');
                 xhr.setRequestHeader('x-access-token', token);
             }
         });
 
         var router = new AppRouter();
-        Backbone.history.start({
-            pushState: true
-        });
+        // Backbone.history.start({
+        //     pushState: true
+        // });
     });
 });

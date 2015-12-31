@@ -13,7 +13,7 @@ define(['jquery',
             this.bindPageEvents();
         },
         bindPageEvents: function() {
-            EventBus.on('home:updateUserInfo', this.updateUserInfo, this);
+            EventBus.on('header:updateUserInfo', this.updateUserInfo, this);
         },
         updateUserInfo: function() {
             this.model = app.getUser();

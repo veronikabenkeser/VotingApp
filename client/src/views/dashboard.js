@@ -12,12 +12,9 @@ define(['jquery',
         initialize:function(){
         },
         render: function() {
-            console.log('trying to render dashboard view');
             this.$el.html(this.template(this.model.toJSON()));
-            console.log(this.$el);
             return this;
         }
     });
-
     return DashboardView;
 });

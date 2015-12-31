@@ -74,7 +74,6 @@ define(['jquery',
            EventBus.trigger("app:recordPoll", formData);
         },
         savePoll:function(formData, userId){
-            console.log("SAVE POLL EVENT TRIGGERED");
             var self = this;
              $.ajax({
                         url: '/api/users/' + userId + '/polls',
@@ -88,7 +87,6 @@ define(['jquery',
                         app.deleteLocalPoll();
                     })
                     .fail(function(err) {
-                       console.log(err);
                        self.saveLocally(formData);
                          self.showPollNotSaved();
                          

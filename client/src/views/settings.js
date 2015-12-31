@@ -55,18 +55,16 @@ define(['jquery',
                     data: formValues
                 })
                 .done(function(response) {
-                    // EventBus.trigger("app:authenticated", response);
+                    EventBus.trigger("app:goHome");
                     console.log('password changed');
                 })
-                //  .fail(function(jqXHr, textStatus, errorThrown){
                 .fail(function(response) {
-                    console.log("req failed");
-                    //   console.log(jqXHr.responseText);
+                    $('.alert-warning').show();
                     console.log("error - password not changed");
                 });
         },
         validate: function(attrs) {
-
+            $('.alert-warning').hide();
             var self = this;
             var errors = this.errors = {};
 
@@ -104,7 +102,6 @@ define(['jquery',
             var errors = this.validate(tempObj);
 
             if (!errors) {
-                console.log("error obj is empty");
                 this.removeValidationErr(fieldName);
             }
         },

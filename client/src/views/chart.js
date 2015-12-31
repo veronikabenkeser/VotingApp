@@ -10,8 +10,6 @@ define(['jquery',
             initialize: function(opts) {
                 this.opts=opts;
                  _.bindAll(this, 'render');
-                
-                
                 // this.render();
             },
             events:{

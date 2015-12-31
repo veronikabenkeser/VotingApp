@@ -2,18 +2,15 @@ define(['jquery',
     'underscore',
     'backbone',
     'text!src/templates/pollDetails.html',
-     'text!src/templates/pollChart.html',
      'chart-js',
      'src/views/chart',
      'eventBus',
-     'src/models/poll'
-], function($, _, Backbone, pollDetailsTemplate, ChartTemplate,Chart,ChartView,EventBus,Poll) {
+     'src/models/poll',
+     'app'
+], function($, _, Backbone, pollDetailsTemplate, Chart,ChartView,EventBus,Poll,app) {
     var PollDetailsView = Backbone.View.extend({
         el:'#content',
-        templates:{
-            'details': _.template(pollDetailsTemplate),
-            'chart': _.template(ChartTemplate)
-        },
+        template: _.template(pollDetailsTemplate),
         events: {
             'click #delete': 'deletePoll',
             'click #vote' : 'vote',
@@ -38,18 +35,6 @@ define(['jquery',
             this.model.destroy().done(function() { //model is automatically removed from the collection
                 self.remove(); ////Delete view or self.render() to redraw
             });
-
-            //  this.model.destroy({ //model is automatically removed from the collection
-            //      success: function(){
-
-            //          console.log("Poll deleted successfully");
-            //          //Delete view
-            //  self.remove();
-            //         // //  window.history.back();
-
-            //      }
-            //  });
-
         },
         vote:function(){
             var self = this;
@@ -80,10 +65,13 @@ define(['jquery',
             var obj={
                 'newOptionsArr':newOptionsArr,
                 'voteId':voteId,
-                'voteNewOptionName':voteName
+                'voteNewOptionName':voteName,
+                // 'voter': app.getUser().id
+                'voter':this.opts.user.attributes._id
             };
               $.ajax({
-                        url: '/api/polls/'+this.model.attributes.slug,
+                        // url: '/api/polls/'+this.model.attributes.slug,
+                        url: '/api/polls/'+this.model.id,
                         type: 'PUT',
                         dataType: "json",
                         data: obj
@@ -92,11 +80,11 @@ define(['jquery',
                         //server responds with a populated poll
                         var p = new Poll(poll);
                         self.showChart(p);
+                        app.initializeUser();
                     })
                     .fail(function(err) {
                         //self.showPollNotSaved();
                     });
-                    
         },
         getRandomColor:function(){
             var letters = '0123456789ABCDEF'.split('');
@@ -111,27 +99,9 @@ define(['jquery',
                     model:poll
                 }));
         },
-        showChart0:function(poll){
-            var self =this;
-            var data=[];
-            poll.options.forEach(function(option){ 
-                var obj = {
-                    value: parseInt(option.votes,10),
-                    color: self.getRandomColor(),
-                    highlight: "#FF5A5E", 
-                    label: option.text
-                };
-                data.push(obj);
-            });
-            self.$el.html(this.templates.chart(self.model.toJSON()));
-            var ctx = $("#myChart").get(0).getContext("2d");
-            var myDoughnutChart = new Chart(ctx).Doughnut(data);
-            document.getElementById('js-legend').innerHTML = myDoughnutChart.generateLegend();
-            return this;
-        },
         render: function() {
             //this.el is what we defined in tagName
-            this.$el.html(this.templates.details({poll:this.model.toJSON(),user:this.opts.user.toJSON()}));
+            this.$el.html(this.template({poll:this.model.toJSON(),user:this.opts.user.toJSON()}));
             return this;
         }  
     });

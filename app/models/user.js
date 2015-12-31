@@ -20,7 +20,8 @@ var UserSchema = new Schema({
     polls: [{
         type: Schema.Types.ObjectId,
         ref: 'Poll'
-    }]
+    }],
+    registeredVotes: []
 
     //     //By setting select to false , the password will not be returned when listing 
     //our users, unless it is explicitly called.

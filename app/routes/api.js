@@ -39,6 +39,11 @@ apiRouter.route('/options/:option_id')
         .get(function(req, res) {
             users.getAllUsers(req, res);
         });
+        
+    apiRouter.route('/polls/:poll_id')
+        .put(function(req,res){
+            polls.modifyPoll(req,res)
+        });    
 
     //Authenticating Users
     apiRouter.post('/authenticate', function(req, res) {
@@ -130,12 +135,6 @@ apiRouter.route('/options/:option_id')
             });
         }
     });
-    
-    
-     apiRouter.route('/polls/:poll_id')
-        .put(function(req,res){
-            polls.modifyPoll(req,res)
-        });
     
     //View, update or delete an existing user account
     apiRouter.route('/users/:user_id')

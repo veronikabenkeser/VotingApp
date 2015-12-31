@@ -71,6 +71,9 @@ h1, h2, h3{
       h5, .h5 {
         font-size: 12px;
       }
+      input {
+          color:black;
+      }
 }
 
 @media (min-width: 768px) {
@@ -275,4 +278,8 @@ div.table-responsive{
     width: 12px;
     height: 12px;
     margin-right: 5px;
+}
+
+.error{
+    color:red;
 }

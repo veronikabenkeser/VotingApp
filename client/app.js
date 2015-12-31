@@ -8,7 +8,6 @@ define([
     var user;
 
     function savePollInLocalStorage(poll){
-        console.log('LOCAL POLl');
         window.localStorage.setItem(globals.extraInfo.unsavedPoll,JSON.stringify(poll));
     }
     
@@ -16,12 +15,6 @@ define([
         window.localStorage.setItem(globals.auth.TOKEN_KEY, response.token);
         window.localStorage.setItem(globals.auth.USER_KEY, response._id);
         initializeUser();
-        // EventBus.trigger('router:navigate', {
-        //     route: 'home',
-        //     options: {
-        //         trigger: true
-        //     }
-        // });
     }
     
     function goHome(){
@@ -39,18 +32,20 @@ define([
 
     function initializeUser() {
         var d = $.Deferred();
-        console.log("user here");
-        console.log(user);
         if (isAuthenticated() && !user) {
             user = new User({
                 _id: window.localStorage.getItem(globals.auth.USER_KEY)
             });
             user.fetch().done(function() { //populates all the properties on the user, including, name, email, polls, etc
-                EventBus.trigger('home:updateUserInfo');
+                EventBus.trigger('header:updateUserInfo');
                 d.resolve();
             });
-        }
-        else {
+        //Fetching updated information for this user in order to know which polls the user has already voted in.
+        } else if(isAuthenticated() && user){
+            user = user.fetch().done(function() { //populates all the properties on the user, including, name, email, polls, etc
+                d.resolve();
+            });
+        } else {
             d.resolve();
         }
         return d.promise();
@@ -61,10 +56,7 @@ define([
     }
     
     function getUnsavedPoll(){
-        console.log("unsaved poll that is getting returned in app.js : ");
         var objStr = JSON.parse(window.localStorage.getItem(globals.extraInfo.unsavedPoll));
-       console.log(objStr);
-        
         // return JSON.parse(window.localStorage.getItem(globals.extraInfo.unsavedPoll));
         return objStr;
     }
@@ -73,13 +65,6 @@ define([
         window.localStorage.removeItem(globals.auth.TOKEN_KEY);
         window.localStorage.removeItem(globals.auth.USER_KEY);
         user = null;
-        EventBus.trigger('home:updateUserInfo');
-        EventBus.trigger('router:navigate', {
-            route: 'home',
-            options: {
-                trigger: true
-            }
-        });
     }
     
     function deleteLocalPoll(){

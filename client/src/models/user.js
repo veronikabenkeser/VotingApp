@@ -6,7 +6,8 @@ define(['underscore', 'backbone', 'src/collections/polls'], function(_, Backbone
       _id: null,
       name: '',
       email: '',
-      password: ''
+      password: '',
+      registeredVotes:''
     },
     initialize: function() {//called whenever a model's data is returned by the server(fetch and save). 
     this.polls= new Polls();

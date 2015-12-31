@@ -1,10 +1,10 @@
 var Poll = require('../models/poll');
 var Option= require("../models/option");
+var User = require("../models/user");
 
 module.exports = {
 
     getAllPolls: function(req, res) {
-        console.log(Poll.model);
         Poll.find(function(err, polls) {
             if (err) return res.send(err);
 
@@ -37,8 +37,10 @@ module.exports = {
         var newOptionsArr = req.body.newOptionsArr;
         var voteNewOptionName = req.body.voteNewOptionName;
         var voteId = req.body.voteId;
+        var voter = req.body.voter;
         
-         Poll.findByFriendly(req.params.poll_id, function(err, poll){
+        //  Poll.findByFriendly(req.params.poll_id, function(err, poll){
+         Poll.findById(req.params.poll_id, function(err, poll){
              if (err) return res.status(400).json(err);
          
         function saveOption(option,callback){
@@ -53,7 +55,6 @@ module.exports = {
                  var option = new Option();
                 option.text = opt;
                 if(option.text === voteNewOptionName){
-                    console.log('same name');
                     option.votes = 1;
                 } else {
                     option.votes =0;
@@ -62,8 +63,6 @@ module.exports = {
             }
             
             function recordNewOptions(newOptionsArr){
-                console.log('new Options Arr');
-                console.log(newOptionsArr);
                 var count=0;
             
                 newOptionsArr.forEach(function(opt){
@@ -113,10 +112,33 @@ module.exports = {
                 }
             }
             
-        if(voteId){
-            voteForExistingOpt(voteId);
-        } else {
-            recordNewOptions(newOptionsArr);
+        function recordVote(){
+             if(voteId){
+                voteForExistingOpt(voteId);
+            } else {
+                recordNewOptions(newOptionsArr);
+            }
+        }
+        
+        
+        if(voter){
+             User.findById(voter, function(err, user){
+            if (err) return res.status(400).json(err);
+            if(user.registeredVotes.indexOf(req.params.poll_id) === -1){
+                //Add this poll id to the user's profile to prevent the user from voting twice in one poll
+                user.registeredVotes.push(req.params.poll_id);
+                user.save(function(err, user){
+                    if(err) return res.status(400).json(err);
+                    recordVote();
+                });
+            } else {
+                return res.status(400).json({
+                    message: 'You have already voted in this poll'
+                });
+            }
+       });
+        }else{
+             recordVote();
         }
     });
     },

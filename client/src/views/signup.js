@@ -34,7 +34,6 @@ define(['jquery',
             var errors = this.model.validate(tempObj);
 
             if (!errors) {
-                console.log("error obj is empty");
                 this.removeValidationErr(fieldName);
             }
         },
@@ -97,18 +96,17 @@ define(['jquery',
                         })
                         .done(function(response) {
                             EventBus.trigger("app:authenticated", response);
+                            EventBus.trigger("app:goHome");
 
                         })
                         .fail(function(response) {
-                            console.log("req failed");
                             self.$('.alert-warning').text(response.message).show();
 
                         });
 
                 },
                 error: function(model, error) {
-                    console.log(model.toJSON());
-                    console.log("ERROR OCCURED");
+                    alert(error);
                 }
             });
         },

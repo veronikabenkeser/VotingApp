@@ -3,10 +3,11 @@ define(['jquery',
     'backbone',
     'text!src/templates/poll.html',
     'eventBus',
-    'app'
-], function($, _, Backbone, pollTemplate,EventBus,app) {
+    'app',
+    'src/views/chart'
+], function($, _, Backbone, pollTemplate,EventBus,app,ChartView) {
     var PollView = Backbone.View.extend({
-        template: _.template(pollTemplate),
+            template: _.template(pollTemplate),
             initialize: function(opts) {
                 this.opts=opts;
                  _.bindAll(this, 'render');
@@ -36,7 +37,6 @@ define(['jquery',
                     });
             },
             showResults:function(){
-                console.log('clicked showresults');
                   EventBus.trigger('router:navigate', {
                         route: 'polls/'+this.model.id+'/results',
                         options: {

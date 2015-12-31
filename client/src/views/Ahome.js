@@ -14,14 +14,12 @@ define(['jquery',
         el: '#home', //homeview goes into the home id of the index.html file
         template: _.template(HomeTemplate),
         initialize: function() {
-            // this.render();
             this.contentView = null;
-            console.log("Ahome view initializing");
             //Set up the view to listen to messages
             this.bindPageEvents();
         },
-
-        render: function() {
+        
+        render:function(){
             var self = this;
             //render this template to make sure the DOM is ready to accept elements from other views
             self.$el.html(self.template);
