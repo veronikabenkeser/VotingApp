@@ -32,7 +32,7 @@ define(['jquery',
 
             if (app.getUser().id) {
                 var formValues = {
-                    id: app.getUser().id,
+                    // id: app.getUser().id,
                     oldPassword: $('#oldPassword').val(),
                     newPassword: $('#newPassword').val()
                 };
@@ -49,7 +49,8 @@ define(['jquery',
         },
         saveNewPassword: function(formValues) {
             $.ajax({
-                    url: '/api/users/' + formValues.id,
+                    // url: '/api/users/' + formValues.id,
+                    url: '/api/users/'+app.getUser().id,
                     type: 'PUT',
                     dataType: "json",
                     data: formValues

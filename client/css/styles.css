@@ -52,8 +52,7 @@ h1, h2, h3{
         background-color:#16193B;
         color:white !important;
     }
-
-    .cont h2{
+    .cont a{
         color:white !important;
     }
       h1, .h1 {
@@ -63,7 +62,7 @@ h1, h2, h3{
         font-size: 18px;
       }
       h3, .h3 {
-        font-size: 14px;
+        font-size: 16px;
       }
       h4, .h4 {
         font-size: 12px;

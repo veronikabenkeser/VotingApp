@@ -33,6 +33,7 @@ define([
     function initializeUser() {
         var d = $.Deferred();
         if (isAuthenticated() && !user) {
+            console.log('ONE');
             user = new User({
                 _id: window.localStorage.getItem(globals.auth.USER_KEY)
             });
@@ -42,7 +43,8 @@ define([
             });
         //Fetching updated information for this user in order to know which polls the user has already voted in.
         } else if(isAuthenticated() && user){
-            user = user.fetch().done(function() { //populates all the properties on the user, including, name, email, polls, etc
+                console.log('TWO');
+            user.fetch().done(function() { //populates all the properties on the user, including, name, email, polls, etc
                 d.resolve();
             });
         } else {

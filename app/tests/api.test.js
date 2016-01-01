@@ -3,6 +3,8 @@ process.env.NODE_ENV = 'test';
 var request = require("supertest");
 var app = require("./../../server");
 var server;
+var mongoose = require("mongoose");
+var User = require("../models/user");
 
 describe('app routes', function() {
     before(function(done) {
@@ -10,6 +12,11 @@ describe('app routes', function() {
             if (err) return done(err);
             done();
         });
+    });
+    
+    //Delete all users from the test database after tests are done.
+    after(function() {
+         User.collection.remove({});
     });
 
     it('app should exist', function(done) {
@@ -31,103 +38,83 @@ describe('app routes', function() {
                 .expect(200, done);
         });
     });
-    
-    describe('Request to the polls path',function() {
-        it('Returns a 200 status code',function(done){
+
+    describe('Request to the polls path', function() {
+        it('Returns a 200 status code', function(done) {
             request(app)
                 .get('/api/polls')
                 .expect(200, done);
         });
-        it('Returns JSON format',function(done) {
+        it('Returns JSON format', function(done) {
             request(app)
                 .get('/api/polls')
-                .expect('Content-Type',/json/,done);
+                .expect('Content-Type', /json/, done);
         });
     });
-    
-    describe('User',function() {
-        var token='',
-            id='';
-        
-        it('should correctly add a user to a database',function(done) {
-              var user = {
-                name: 'user1',
-                email: 'user1@gmail.com',
-                password: '123'
-                
-            };
+
+    describe('User', function() {
+        var token = '',
+            id = '';
+
+        it('should correctly add a user to a database', function(done) {
+            var user = {};
+            user.name = 'user1';
+            user.email = 'user1@gmail.com';
+            user.password = '123';
+
             request(app)
-            .post('/api/users')
-            .send(user)
-            .end(function(err, res) {
-                expect(res.status).to.equal(200);
-                done();
-            });
-         });
-        
-        it('should return an error when trying to save a duplicate user',function(done) {
-            
-            var user = {
-                name: 'user1',
-                email: 'user1@gmail.com',
-                password: '123'
-            };
-            
+                .post('/api/users')
+                .send(user)
+                .end(function(err, res) {
+                    expect(res.status).to.equal(200);
+                    done();
+                });
+        });
+
+        it('should return an error when trying to save a duplicate username', function(done) {
+            var user = {};
+            user.name = 'user';
+            user.email = 'user1@gmail.com';
+            user.password = '12345';
+
             request(app)
-            .post('/api/users')
-            .send(user)
-            .end(function(err,res){
-                expect(res.status).to.equal(400);
-                done();
-            });
+                .post('/api/users')
+                .send(user)
+                .end(function(err, res) {
+                    expect(res.status).to.equal(400);
+                    done();
+                });
         });
-        
-        it('should get a valid token for user1',function(done) {
-           request(app)
-            .post('/api/authenticate')
-            .send({email: 'user1@gmail.com', password: '123'})
-            .end(function(err,res){
-                token = res.body.token;
-                id=res.body._id;
-                done();
-            });
-            
-        });
-        
-        it('should modify user',function(done) {
-            var link = '/api/users/'+id;
+
+        it('should authenticate user', function(done) {
             request(app)
-            .put(link)
-            .set('x-access-token',token)
-            .send({email: 'Superuser1@gmail.com'})
-            .end(function(err,res){
-                expect(200);
-                console.log('res json');
-                console.log('kitty');
-                console.log(res);
-                // expect(res.body.name).to.equal('user1');
-                expect(res.status).to.equal(200);
-                done();
-            });
-            
+                .post('/api/authenticate')
+                .send({
+                    email: 'user1@gmail.com',
+                    password: '123'
+                })
+                .end(function(err, res) {
+                    token = res.body.token;
+                    id = res.body._id;
+                    done();
+                });
         });
-        
-         it('should correctly delete a user from the database',function(done) {
-             
-             //get a new token
-             request(app)
-            .post('/api/authenticate')
-            .send({email: 'Superuser1@gmail.com', password: '123'})
-            .end(function(err,res){
-                token = res.body.token;
-                id=res.body._id;
-                
-            });
-            
-          request(app)
-            .delete('/api/users/1')
-            .set('x-access-token', token)
-            .expect(200,done);
-            });
-         });
+
+        it('should successfully change users password', function(done) {
+            var link = '/api/users/' + id;
+            request(app)
+                .put(link)
+                .set('x-access-token', token)
+                .send({
+                    oldPassword: '123',
+                    newPassword: '321'
+                })
+                .end(function(err, res) {
+
+                    // expect(res.body.name).to.equal('user1');
+                    expect(res.status).to.equal(200);
+                    done();
+                });
+        });
+    });
 });

@@ -73,9 +73,7 @@ define(['backbone',
                 // var user = new User();
                 // console.log('the user here ');
                 // console.log(user);
-                EventBus.trigger('home:displayView', new LoginView({
-                    // model: user
-                }));
+                EventBus.trigger('home:displayView', new LoginView());
             },
             logout: function() {
                 EventBus.trigger("app:logout");
@@ -84,8 +82,8 @@ define(['backbone',
                     route: 'home',
                     options: {
                         trigger: true
-                    }
-                });
+                }
+            });
             },
             bindApplicationEvents: function() {
                 EventBus.on('router:navigate', this._navigate, this);
@@ -162,9 +160,7 @@ define(['backbone',
                         model: user
                     }));
                 } else {
-                    EventBus.trigger('home:displayView', new LoginView({
-                        model: user
-                    }));
+                    EventBus.trigger('home:displayView', new LoginView());
                 }
             },
             showMyPolls: function() {
@@ -184,9 +180,7 @@ define(['backbone',
 
                 }
                 else {
-                    EventBus.trigger('home:displayView', new LoginView({
-                        model: user
-                    }));
+                    EventBus.trigger('home:displayView', new LoginView());
                 }
             }
         });

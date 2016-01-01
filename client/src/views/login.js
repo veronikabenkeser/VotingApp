@@ -20,10 +20,9 @@ define(['jquery',
             'click .login': 'login'
         },
         login: function(e) {
-            EventBus.trigger("app:logout");
+            e.preventDefault();
             $('.alert-warning').hide();
             var self = this;
-            e.preventDefault();
             //   var url = "/api/authenticate";
             var formValues = {
                 email: $('#email').val(),

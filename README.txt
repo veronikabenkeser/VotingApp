@@ -1,4 +1,5 @@
 Voting App for Free Code Camp.
+
 User Stories:
 1. As an authenticated user, I can keep my polls and come back later to access them.
 2. As an authenticated user, I can share my polls with my friends.

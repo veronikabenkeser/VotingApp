@@ -38,6 +38,7 @@ define(['jquery',
             }
         },
         realTimeOnInputChange: function(e) {
+            $('.alert-warning').hide();
             var fieldName = e.target.id;
             if ($('#' + fieldName).parent().hasClass('error')) {
                 this.onInputChange(e);
@@ -68,6 +69,7 @@ define(['jquery',
         },
         registerUser: function(e) {
             e.preventDefault();
+            $('.alert-warning').hide();
             var self = this;
             $('#signup-form div').children('input').each(function(index, elem) {
                 self.model.set(elem.id, $(elem).val());
@@ -75,7 +77,7 @@ define(['jquery',
             });
 
 
-            //automatically validating according to the model beofre save
+            //Save the new user and authenticate the user upon a successful save.
             self.model.save(null, { //issues a post request to the link in user model.
 
                 wait: true, //don't update the client side model until the server side trip is successful
@@ -100,13 +102,13 @@ define(['jquery',
 
                         })
                         .fail(function(response) {
-                            self.$('.alert-warning').text(response.message).show();
+                              console.log(response);
 
                         });
 
                 },
                 error: function(model, error) {
-                    alert(error);
+                     $('.alert-warning').show();
                 }
             });
         },

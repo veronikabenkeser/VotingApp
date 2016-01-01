@@ -2,7 +2,7 @@
           <!--<a href="<%='polls/'+poll._id+'/results'%>" class="list-group-item clearfix">-->
            <div class="list-group-item clearfix">
              <div id ="view-results">
-         <span class="pull-left poll-name">
+         <span class="pull-left poll-name" style="cursor: pointer ;">
       <span class="glyphicon glyphicon-file"></span>
       <%=poll.name%>
       </span>
@@ -15,7 +15,8 @@
     <!--</a>  -->
     </div>
       <%} else {%>
-      <a href="<%='polls/'+poll._id%>" class="list-group-item clearfix">
+      <!--<a href="<%='polls/'+poll._id%>" class="list-group-item clearfix">-->
+      <a href="<%='polls/'+poll.slug%>" class="list-group-item clearfix">
          <h2><%=poll.name%></h2>
     </a>
     

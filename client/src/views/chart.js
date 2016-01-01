@@ -27,6 +27,7 @@ define(['jquery',
             render: function(){
             var self =this;
             var data=[];
+            
             self.model.toJSON().options.forEach(function(option){ 
            
                     var obj = {

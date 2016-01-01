@@ -39,11 +39,13 @@ module.exports = {
                     });
                 }
             }
+        
             res.json({
                 success: true,
                 message: 'New user created.'
             });
         });
+       
     },
     getById: function(req, res) {
         User.findById(req.params.user_id, function(err, user) {
@@ -66,15 +68,12 @@ module.exports = {
         });
     },
     addPoll: function(req, res) {
-        console.log("IN ADD POLL");
         User.findById(req.params.user_id, function(err, user) {
             if (err) return res.status(400).json(err);
             
             var poll = new Poll();
             poll.name= req.body.name;
             poll.options = [];
-            console.log('here is the request body');
-            console.log(req.body);
             
             req.body.options.forEach(function(opt){
                 
@@ -163,14 +162,14 @@ module.exports = {
         });
     },
     changeSettings: function(req, res) {
-        console.log('req body');
-        console.log(req.body);
-        var id = req.body.id;
+        // var id = req.body.id;
+        
         User.findOne({
-            _id: id
+            _id: req.params.user_id
         }).select('password').exec(function(err, user) {
+            // if (err) return res.status(400).json(err);
             if (err) return res.status(400).json(err);
-            //no user with that email found
+            //If the user is not null
             if (!user) {
                 return res.status(400).json({
                     success: false,
@@ -184,8 +183,7 @@ module.exports = {
                     success: false,
                     message: 'Authentication failed. Wrong password.'
                 });
-            }
-            else {
+            } else {
                 //update password
                 user.password = req.body.newPassword;
                 user.save(function(err, user) {
