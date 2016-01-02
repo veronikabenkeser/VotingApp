@@ -8,7 +8,6 @@ var async = require('async');
 
 module.exports = {
     getAllUsers: function(req, res) {
-        console.log(User.model);
         User.find(function(err, users) {
             if (err) return res.send(err);
             res.json(users);
@@ -68,45 +67,66 @@ module.exports = {
         });
     },
     addPoll: function(req, res) {
+        var self =this;
         User.findById(req.params.user_id, function(err, user) {
             if (err) return res.status(400).json(err);
             
+            self.saveOptions(req.body.options)
+                    .then(function(optionsArr) {
+                          var pollName = req.body.name;
+                          self.savePoll(pollName, optionsArr)
+                                .then(function(poll){
+                                    user.polls.push(poll);
+                                    user.save(function(err, user){
+                                        if (err) return res.status(500).json(err);
+                                        res.json(poll);
+                                    });
+                                }, function(err){
+                                    return res.status(500).json(err);
+                                });
+                        }, function(err) {
+                          console.log(err);
+                          return res.status(400).json(err);
+                        });
+        });
+    },
+    savePoll:function(pollName,optionsArr){
+        return new Promise(function(resolve,reject){
             var poll = new Poll();
-            poll.name= req.body.name;
-            poll.options = [];
-            
-            req.body.options.forEach(function(opt){
-                
-                var option = new Option(opt);
-                option.save(function(err,option){
-                    if(err) return res.status(400).json(err);
-                    poll.options.push(option);
-                });
-                // poll.options.push(option);
-            });
-            
-            // var poll = new Poll(req.body);
-           
-            // var generalPollCollection = new Polls(null, {url:'/api/polls/'});
-             
-            //user.polls is the User's Polls Collection
-            user.polls.push(poll);
-            console.log('just pushed poll');
-
-            // add this poll to the user's schema and save the poll model
-            user.save(function(err, user) {
-                if (err) return res.status(500).json(err);
-                
-                poll.save(function(err, poll) {
-                    if (err) return res.status(500).json(err);
-                    res.json(poll);
-                });
-                
-                //  res.json(user);
+            poll.name= pollName;
+            poll.options = optionsArr.slice();
+            poll.save(function(err,poll){
+                if(err) {
+                    reject(err);
+                } else {
+                    resolve(poll);
+                }
             });
         });
     },
-    getAllPolls:function(req,res){
+    saveOptions:function(options){
+        var optsArr=[];
+        var promises = options.map(function(opt){
+            return new Promise(function(resolve, reject){
+                  var option = new Option(opt);
+                  return option.save(function(err,option){
+                      if(err){
+                          reject(Error(err));
+                      } else {
+                      resolve(optsArr.push(option));
+                      }
+                  });
+            });
+        });
+        
+        return Promise.all(promises).then(function(){
+                return optsArr;
+            }).catch(function (err) {
+                console.log(err);
+        });
+    },
+    
+    getAllPolls: function(req,res) {
        
         User.findOne({ _id: req.params.user_id})
             .populate('polls')
@@ -136,9 +156,6 @@ module.exports = {
         });
     },
     deletePoll: function(req, res) {
-        
-         console.log("IN DELETE POLL");
-         
          
         User.findById(req.params.user_id, function(err, user) {
             if (err) return res.status(400).json(err);

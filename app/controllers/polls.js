@@ -141,17 +141,5 @@ module.exports = {
              recordVote();
         }
     });
-    },
-    deletePoll: function(req, res) {
-        
-        
-        Poll.remove({
-            _id: req.params.poll_id
-        }, function(err, poll) {
-            if (err) return res.send(err);
-            res.json({
-                message: 'This poll has been successfully deleted.'
-            });
-        });
     }
 };
