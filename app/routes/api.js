@@ -161,6 +161,5 @@ apiRouter.route('/options/:option_id')
         .delete(function(req, res) {
             users.deletePoll(req, res);
         });
-        
     return apiRouter;
 };

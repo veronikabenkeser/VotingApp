@@ -21,6 +21,7 @@ define(['jquery',
         
         render:function(){
             var self = this;
+           
             //render this template to make sure the DOM is ready to accept elements from other views
             self.$el.html(self.template);
             //If user has been authenticated, load user's id. If not , create a new user

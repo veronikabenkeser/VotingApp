@@ -13,11 +13,12 @@ define(['backbone',
         'src/views/login',
         'src/views/authorizedHomepage',
         'src/views/settings',
+        'src/views/notFound',
         'eventBus',
         'app'
     ],
     function(Backbone, Polls, PollsView, PollDetailsView, HomeView, DashboardView, AddPollView, ChartView, Poll,
-        User, SignupView, LoginView, AuthorizedHomepageView, SettingsView, EventBus, app) {
+        User, SignupView, LoginView, AuthorizedHomepageView, SettingsView, NotFoundView, EventBus, app) {
         var AppRouter = Backbone.Router.extend({
             initialize: function() {
                
@@ -30,6 +31,7 @@ define(['backbone',
                         window.open(href, '_blank');
                         return;
                     } 
+                
                     // pass this link to Backbone
                     Backbone.history.navigate(href, true); //routing all a href elements in links (in templates) to the backbone router.
                 });
@@ -52,13 +54,16 @@ define(['backbone',
                 "polls/:slug": "pollDetails",
                 "polls/:id/results": 'pollResults',
                 "mypolls": "showMyPolls",
-                "settings": "showSettings"
+                "settings": "showSettings",
+                 '*notFound': 'notFound'
 
+            },
+            notFound: function(){
+                EventBus.trigger('home:displayView', new NotFoundView());
             },
             home: function() {
                 var user = app.getUser();
-                console.log("USERR");
-                console.log(user._id);
+                console.log(user);
                 EventBus.trigger('home:displayView', new DashboardView({
                     model:user
                 }));

@@ -4,6 +4,8 @@ var sinon = require("sinon");
 var UserStub = sinon.stub();
 var PollStub = sinon.stub();
 var OptionStub = sinon.stub();
+var saveOptionsStub = sinon.stub();
+var savePollStub = sinon.stub();
 var users = proxyquire('../controllers/users', {
     '../models/user': UserStub,
     '../models/poll': PollStub,
@@ -53,7 +55,6 @@ describe('UsersController', function() {
         UserStub.findOne = function(){
             return mockFindOne;
         };
-        
     });
 
     describe('addUser', function() {
@@ -150,7 +151,7 @@ describe('UsersController', function() {
             });
         });
         
-        it('TWO returns an error if the passwords dont match',function() {
+        it('returns an error if the passwords dont match',function() {
             UserStub.comparePassword = function(){
                 return false;
                 user.changeSettings(req,res);
@@ -189,12 +190,50 @@ describe('UsersController', function() {
             });
         });
     });
+    
+    
+    
     describe('add a poll',function() {
         it('should be defined',function(){
             expect(users.addPoll).to.be.a('function');
         });
         
-        it('FOUR should add the poll to the polls collection', function() {
+        it('should add the poll to the polls collection',function(){
+            req.body = {
+                name: 'Poll1',
+                options: [{text:'option1', votes:0},{text:'option2', votes:1}]
+            };
+         
+            // var saveOptionsStub = sinon.stub();
+            // saveOptionsStub.returns([OptionStub, OptionStub]);
+            // var savePollStub = sinon.stub('savePoll');
+            // savePollStub.returns({});
+            // expect('user.polls').to.equal('[{}]');
+            
+            sinon.stub(require('../controllers/users'),'saveOptions').returns ([OptionStub, OptionStub]);
+            
+            sinon.stub(require('../controllers/users'), 'savePoll').returns ({});
+            
+            // var saveOptions = function(){
+            //     console.log('stub');
+            //     return ([OptionStub, OptionStub]);
+            // };
+            
+            // var savePoll = function(){
+            //     console.log('stub2');
+            //     return {};
+            // };
+            
+            var user = {};
+            user.polls=[];
+            UserStub.findById = function(query, callback) {
+                callback(null, user);
+            };
+            users.addPoll(req,res);
+            expect(user.polls).to.equal('[{}]');
+        });
+        
+        it('should add the poll to the polls collection', function() {
             
              req.body = {
                 name: 'Poll1',
@@ -203,7 +242,6 @@ describe('UsersController', function() {
             
             var optObj={};
             OptionStub.save = function(callback){
-                console.log('here now');
                 callback(null,optObj);
             };
            

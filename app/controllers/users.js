@@ -67,10 +67,10 @@ module.exports = {
         });
     },
     addPoll: function(req, res) {
+       
         var self =this;
         User.findById(req.params.user_id, function(err, user) {
             if (err) return res.status(400).json(err);
-            
             self.saveOptions(req.body.options)
                     .then(function(optionsArr) {
                           var pollName = req.body.name;
