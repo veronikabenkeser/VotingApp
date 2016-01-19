@@ -1,5 +1,5 @@
 node_modules
 bower_components
-config
 data
 client/libs
+.env

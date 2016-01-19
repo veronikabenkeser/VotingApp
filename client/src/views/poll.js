@@ -30,7 +30,7 @@ define(['jquery',
                     })
                     .done(function() {
                         self.remove(); ////Delete view or self.render() to redraw
-                        self.stopListening();
+                        
                     })
                     .fail(function(err) {
                        alert(err);

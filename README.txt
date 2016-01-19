@@ -9,3 +9,4 @@ User Stories:
 6. As an unauthenticated or authenticated user, I can see and vote on everyone's polls.
 7. As an unauthenticated or authenticated user, I can see the results of polls in chart form.
 8. As an authenticated user, if I don't like the options on a poll, I can create a new option.
+9. Each user can only vote once in a particular poll.

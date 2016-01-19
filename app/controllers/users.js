@@ -1,10 +1,6 @@
 var User = require('../models/user');
 var Poll = require("../models/poll");
 var Option = require("../models/option");
-var config = require('../../config/server');
-var superSecret = config.secret;
-var jwt = require('jsonwebtoken');
-var async = require('async');
 
 module.exports = {
     getAllUsers: function(req, res) {
@@ -14,15 +10,7 @@ module.exports = {
         });
     },
     addUser: function(req, res) {
-        //create a new instance of the User model
         var user = new User(req.body);
-
-        //set the users info(comes from the req)
-        // user.name = req.body.name;
-        // user.email = req.body.email;
-        // user.password = req.body.password;
-
-        //save the user to the database and check for errors
         user.save(function(err, user) {
             if (err) {
                 if (err.code === 11000) {
@@ -48,7 +36,6 @@ module.exports = {
     },
     getById: function(req, res) {
         User.findById(req.params.user_id, function(err, user) {
-            // if (err) return res.send(err);
             if (err) res.json({
                 error: 'User not found.'
             });
@@ -57,7 +44,6 @@ module.exports = {
     },
     deleteUser: function(req, res) {
         User.remove(req.params.user_id, function(err, user) {
-            // if (err) return res.send(err);
             if (err) return res.status(500).json({
                 error: 'Error deleting your account.'
             });
@@ -179,14 +165,10 @@ module.exports = {
         });
     },
     changeSettings: function(req, res) {
-        // var id = req.body.id;
-        
         User.findOne({
             _id: req.params.user_id
         }).select('password').exec(function(err, user) {
-            // if (err) return res.status(400).json(err);
             if (err) return res.status(400).json(err);
-            //If the user is not null
             if (!user) {
                 return res.status(400).json({
                     success: false,
@@ -201,13 +183,11 @@ module.exports = {
                     message: 'Authentication failed. Wrong password.'
                 });
             } else {
-                //update password
                 user.password = req.body.newPassword;
                 user.save(function(err, user) {
                     if (err) return res.status(500).json({
                         error: err
                     });
-
                     res.json({
                         message: 'Password has been updated.'
                     });

@@ -4,8 +4,25 @@
   "dependencies": {
     "async": {
       "version": "0.2.10",
-      "from": "async@>=0.2.8 <0.3.0",
+      "from": "https://registry.npmjs.org/async/-/async-0.2.10.tgz",
       "resolved": "https://registry.npmjs.org/async/-/async-0.2.10.tgz"
+    },
+    "backbone-relational": {
+      "version": "0.10.0",
+      "from": "backbone-relational@*",
+      "resolved": "https://registry.npmjs.org/backbone-relational/-/backbone-relational-0.10.0.tgz",
+      "dependencies": {
+        "underscore": {
+          "version": "1.8.3",
+          "from": "underscore@>=1.7.0",
+          "resolved": "https://registry.npmjs.org/underscore/-/underscore-1.8.3.tgz"
+        },
+        "backbone": {
+          "version": "1.2.3",
+          "from": "backbone@>=1.2.1",
+          "resolved": "https://registry.npmjs.org/backbone/-/backbone-1.2.3.tgz"
+        }
+      }
     },
     "bcrypt-nodejs": {
       "version": "0.0.3",
@@ -1704,6 +1721,11 @@
         }
       }
     },
+    "dotenv": {
+      "version": "1.2.0",
+      "from": "dotenv@*",
+      "resolved": "https://registry.npmjs.org/dotenv/-/dotenv-1.2.0.tgz"
+    },
     "express": {
       "version": "4.13.3",
       "from": "express@*",
@@ -2249,6 +2271,35 @@
           "version": "0.0.5",
           "from": "sliced@0.0.5",
           "resolved": "https://registry.npmjs.org/sliced/-/sliced-0.0.5.tgz"
+        }
+      }
+    },
+    "mongoose-friendly": {
+      "version": "0.1.4",
+      "from": "mongoose-friendly@*",
+      "resolved": "https://registry.npmjs.org/mongoose-friendly/-/mongoose-friendly-0.1.4.tgz",
+      "dependencies": {
+        "urlify": {
+          "version": "0.3.6",
+          "from": "urlify@>=0.3.0 <0.4.0",
+          "resolved": "https://registry.npmjs.org/urlify/-/urlify-0.3.6.tgz"
+        }
+      }
+    },
+    "mongoose-slug-generator": {
+      "version": "1.0.2",
+      "from": "mongoose-slug-generator@*",
+      "resolved": "https://registry.npmjs.org/mongoose-slug-generator/-/mongoose-slug-generator-1.0.2.tgz",
+      "dependencies": {
+        "async": {
+          "version": "1.5.0",
+          "from": "async@>=1.5.0 <2.0.0",
+          "resolved": "https://registry.npmjs.org/async/-/async-1.5.0.tgz"
+        },
+        "speakingurl": {
+          "version": "7.0.0",
+          "from": "speakingurl@>=7.0.0 <8.0.0",
+          "resolved": "https://registry.npmjs.org/speakingurl/-/speakingurl-7.0.0.tgz"
         }
       }
     },

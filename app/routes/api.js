@@ -1,9 +1,6 @@
 var User = require('../models/user');
-var config = require('../../config/server');
-var superSecret = config.secret;
+var superSecret = process.env.SECRET;
 var jwt = require('jsonwebtoken');
-
-var Poll = require("../models/poll");
 var users = require("../controllers/users");
 var polls = require("../controllers/polls");
 var Option = require("../models/option");
@@ -20,7 +17,6 @@ module.exports = function(app, express) {
         .get(function(req, res) {
             polls.getById(req, res);
         });
-
 
 apiRouter.route('/options/:option_id')
         .get(function(req,res){
