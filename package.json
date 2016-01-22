@@ -1,7 +1,7 @@
 {
   "name": "VotingApp",
   "version": "0.0.0",
-  "description": "Basejump 1 for FreeCodeCamp",
+  "description": "Polling App built as an assignment for FreeCodeCamp",
   "main": "server.js",
   "repository": "",
   "author": "Veronika Benkeser <veronika.benkeser@gmail.com>",
