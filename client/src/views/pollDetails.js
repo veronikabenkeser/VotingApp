@@ -77,7 +77,7 @@ define(['jquery',
                     app.initializeUser();
                 })
                 .fail(function(err) {
-                    alert("Error. Your vote has not been saved. Please refresh the page and try again.")
+                    alert("Error. Your vote has not been saved. Please refresh the page and try again.");
                 });
         },
         getRandomColor: function() {

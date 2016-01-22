@@ -56,14 +56,14 @@ define(['jquery',
             var self = this;
             var errors = this.errors = {};
 
-            if (attrs.oldPassword != null) {
+            if (attrs.oldPassword !== null) {
 
                 if (!attrs.oldPassword) {
                     errors.oldPassword = 'Your old password is required.';
                 }
             }
 
-            if (attrs.newPassword != null) {
+            if (attrs.newPassword !== null) {
 
                 if (!attrs.newPassword) {
                     errors.newPassword = 'Your new password is required.';

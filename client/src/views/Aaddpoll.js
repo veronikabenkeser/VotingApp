@@ -102,7 +102,7 @@ define(['jquery',
             $('#add-poll-form').hide();
             var link = 'https://try4-autumncat.c9users.io/polls/' + slug;
             $("#poll-link").attr("href", link);
-            $('.twitter-share-button').attr('data-url', link)
+            $('.twitter-share-button').attr('data-url', link);
             $('#poll-link').text(link);
             $('.poll-saved').show();
         },

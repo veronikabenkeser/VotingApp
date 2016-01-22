@@ -1,6 +1,9 @@
 {
   "name": "My-Polling-App",
   "version": "0.0.0",
+  "engines": {
+    "node": "4.1.1"
+   },
   "description": "Polling App built as an assignment for FreeCodeCamp",
   "main": "bin/www",
   "repository": "",
@@ -22,8 +25,6 @@
     "mongoose-slug-generator": "^1.0.2",
     "morgan": "^1.6.1",
     "nodemon": "^1.8.1",
-    "passport": "^0.3.2",
-    "passport-local": "^1.0.0",
     "require": "^2.4.20",
     "requirejs": "^2.1.22"
   },
@@ -33,6 +34,15 @@
     "proxyquire": "^1.7.3",
     "sinon": "^1.17.2",
     "sinon-chai": "^2.8.0",
-    "supertest": "^1.1.0"
+    "supertest": "^1.1.0",
+    "grunt": "^0.4.5",
+    "grunt-concurrent": "^2.1.0",
+    "grunt-contrib-concat": "^0.5.1",
+    "grunt-contrib-cssmin": "^0.14.0",
+    "grunt-contrib-jshint": "^0.11.3",
+    "grunt-contrib-requirejs": "^0.4.4",
+    "grunt-contrib-uglify": "^0.11.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-nodemon": "^0.4.1"
   }
 }

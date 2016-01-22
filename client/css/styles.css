@@ -307,8 +307,7 @@ div.table-responsive {
     color: red;
 }
 
-
-.desc{
+.desc {
     font-size: 60px;
     display: block;
 }
@@ -320,10 +319,6 @@ div.table-responsive {
 
 .fa-globe {
     color: #3333CC;
-}
-
-.fa-twitter {
-    color: #55acee;
 }
 
 .jumbotron {
@@ -345,4 +340,9 @@ div.table-responsive {
 .navbar-nav>li>a:hover,
 .navbar-brand:hover {
     color: white !important;
+}
+
+.my-fa-twiiitter:before {
+    content: "\f099";
+    color: #55acee;
 }

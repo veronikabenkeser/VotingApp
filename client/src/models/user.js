@@ -37,7 +37,7 @@ define(['underscore', 'backbone', 'src/collections/polls'], function(_, Backbone
 
       var errors = this.errors = {};
 
-      if (attrs.password != null) {
+      if (typeof attrs.password !== 'undefined') {
         if (!attrs.password) {
           errors.password = 'password is required';
         }
@@ -45,8 +45,7 @@ define(['underscore', 'backbone', 'src/collections/polls'], function(_, Backbone
           errors.password = 'password is too short';
         }
       }
-      if (attrs.name != null) {
-
+      if (typeof attrs.name !== 'undefined') {
         if (!attrs.name) {
           errors.name = 'Name is required';
         }
@@ -59,7 +58,9 @@ define(['underscore', 'backbone', 'src/collections/polls'], function(_, Backbone
           errors.name = 'name is too large';
       }
 
-      if (attrs.email != null) {
+      if (typeof attrs.email !== 'undefined') {
+        console.log("what is it");
+        console.log(attrs.email);
         if (!attrs.email) {
           errors.email = 'Email is required';
         }

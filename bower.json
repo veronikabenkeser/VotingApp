@@ -16,7 +16,6 @@
     "requirejs": "~2.1.22",
     "text": "requirejs/text#~2.0.14",
     "font-awesome": "~4.5.0",
-    "backbone-relational": "~0.10.0",
     "Chart.js": "~1.0.2"
   },
   "ignore": [

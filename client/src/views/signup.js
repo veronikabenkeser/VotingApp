@@ -95,17 +95,6 @@ define(['jquery',
                     $('.alert-warning').show();
                 }
             });
-        },
-        setValues: function(e) {
-            e.preventDefault();
-            var fieldName = e.target.id;
-            var fieldValue = e.target.value;
-            this.model.set({
-                fieldName, fieldValue
-            }, {
-                validate: true,
-                validateAll: false
-            });
         }
     });
 
