@@ -1,5 +1,5 @@
 {
-  "name": "VotingApp",
+  "name": "My-Polling-App",
   "version": "0.0.0",
   "description": "Polling App built as an assignment for FreeCodeCamp",
   "main": "server.js",
