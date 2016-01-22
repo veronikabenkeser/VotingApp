@@ -3,22 +3,21 @@ define([
     'src/models/user',
     'globals',
     'eventBus'
-
 ], function($, User, globals, EventBus) {
     var user;
 
-    function savePollInLocalStorage(poll){
-        window.localStorage.setItem(globals.extraInfo.unsavedPoll,JSON.stringify(poll));
+    function savePollInLocalStorage(poll) {
+        window.localStorage.setItem(globals.extraInfo.unsavedPoll, JSON.stringify(poll));
     }
-    
+
     function authenticated(response) { //response from server at api/authenticate
         window.localStorage.setItem(globals.auth.TOKEN_KEY, response.token);
         window.localStorage.setItem(globals.auth.USER_KEY, response._id);
         initializeUser();
     }
-    
-    function goHome(){
-         EventBus.trigger('router:navigate', {
+
+    function goHome() {
+        EventBus.trigger('router:navigate', {
             route: 'home',
             options: {
                 trigger: true
@@ -36,16 +35,18 @@ define([
             user = new User({
                 _id: window.localStorage.getItem(globals.auth.USER_KEY)
             });
-            user.fetch().done(function() { //populates all the properties on the user, including, name, email, polls, etc
+            user.fetch().done(function() {
                 EventBus.trigger('header:updateUserInfo');
                 d.resolve();
             });
-        //Fetching updated information for this user in order to know which polls the user has already voted in.
-        } else if(isAuthenticated() && user){
-            user.fetch().done(function() { //populates all the properties on the user, including, name, email, polls, etc
+
+        }
+        else if (isAuthenticated() && user) {
+            user.fetch().done(function() {
                 d.resolve();
             });
-        } else {
+        }
+        else {
             d.resolve();
         }
         return d.promise();
@@ -54,10 +55,9 @@ define([
     function getUser() {
         return user || new User();
     }
-    
-    function getUnsavedPoll(){
+
+    function getUnsavedPoll() {
         var objStr = JSON.parse(window.localStorage.getItem(globals.extraInfo.unsavedPoll));
-        // return JSON.parse(window.localStorage.getItem(globals.extraInfo.unsavedPoll));
         return objStr;
     }
 
@@ -66,15 +66,15 @@ define([
         window.localStorage.removeItem(globals.auth.USER_KEY);
         user = null;
     }
-    
-    function deleteLocalPoll(){
+
+    function deleteLocalPoll() {
         window.localStorage.removeItem(globals.extraInfo.unsavedPoll);
     }
 
     EventBus.on("app:authenticated", authenticated, this);
     EventBus.on("app:logout", logOut);
-    EventBus.on("app:recordPoll", savePollInLocalStorage,this);
-    EventBus.on("app:goHome",goHome);
+    EventBus.on("app:recordPoll", savePollInLocalStorage, this);
+    EventBus.on("app:goHome", goHome);
 
     return {
         isAuthenticated: isAuthenticated,

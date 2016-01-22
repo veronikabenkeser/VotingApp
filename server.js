@@ -28,8 +28,9 @@ mongoose.connect(process.env.MONGOLAB_URI,function(err,res){
 app.use(express.static(__dirname+'/client'));
 var apiRoutes = require("./app/routes/api")(app,express);
 app.use('/api',apiRoutes);
+
 app.get('*', function(req, res){
- 
   res.sendFile(path.join(__dirname+'/client/index.html'));
 }); 
+
 module.exports = app;

@@ -7,13 +7,10 @@ define(['jquery',
     'eventBus',
     'globals',
     'app'
-    // 'backbone-validation',
 
-], function($, _, User, LoginTemplate, Backbone, Users, EventBus, globals,app) {
+], function($, _, User, LoginTemplate, Backbone, Users, EventBus, globals, app) {
 
     var LoginView = Backbone.View.extend({
-        // tagName: 'div',
-        // className:'login-container',
         el: "#content",
         template: _.template(LoginTemplate),
         events: {
@@ -23,12 +20,11 @@ define(['jquery',
             e.preventDefault();
             $('.alert-warning').hide();
             var self = this;
-            //   var url = "/api/authenticate";
             var formValues = {
                 email: $('#email').val(),
                 password: $('#password').val()
             };
-            
+
             $.ajax({
                     url: globals.urls.AUTHENTICATE,
                     type: 'POST',
@@ -37,28 +33,25 @@ define(['jquery',
                 })
                 .done(function(response) {
                     EventBus.trigger("app:authenticated", response);
-                    var unsavedPoll=app.getUnsavedPoll();
-                    if(unsavedPoll){
+                    var unsavedPoll = app.getUnsavedPoll();
+                    if (unsavedPoll) {
                         self.savePollFromStorage(unsavedPoll, app.getUser().id);
-                    } else {
-                         EventBus.trigger("app:goHome");
+                    }
+                    else {
+                        EventBus.trigger("app:goHome");
                     }
                 })
                 .fail(function(response) {
                     $('.alert-warning').show();
                 });
         },
-        savePollFromStorage:function(poll, userId){
-            if(poll && userId){
+        savePollFromStorage: function(poll, userId) {
+            if (poll && userId) {
                 EventBus.trigger('savePoll', poll, userId);
             }
         },
         render: function() {
-            // $(this.el).html(this.template(this.model.toJSON()));
-            //  this.$el.html(this.template(this.model.toJSON()));
-              this.$el.html(this.template);
-
-            //  this.$el.html( this.template( this.model.toJSON()) );
+            this.$el.html(this.template);
             return this;
         }
     });

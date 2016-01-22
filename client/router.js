@@ -1,4 +1,3 @@
-//Client-side route map
 define(['backbone',
         'src/collections/polls',
         'src/views/polls',
@@ -11,34 +10,31 @@ define(['backbone',
         'src/models/user',
         'src/views/signup',
         'src/views/login',
-        'src/views/authorizedHomepage',
         'src/views/settings',
         'src/views/notFound',
         'eventBus',
         'app'
     ],
     function(Backbone, Polls, PollsView, PollDetailsView, HomeView, DashboardView, AddPollView, ChartView, Poll,
-        User, SignupView, LoginView, AuthorizedHomepageView, SettingsView, NotFoundView, EventBus, app) {
+        User, SignupView, LoginView, SettingsView, NotFoundView, EventBus, app) {
         var AppRouter = Backbone.Router.extend({
             initialize: function() {
-               
-                
-                // setup the ajax links for the html5 push navigation
+
                 $("body").on("click", "a:not(a[data-bypass])", function(e) {
                     e.preventDefault();
+
                     var href = $(this).attr("href");
                     if ($(e.currentTarget).prop('target') === '_blank') {
                         window.open(href, '_blank');
                         return;
-                    } 
-                
-                    // pass this link to Backbone
-                    Backbone.history.navigate(href, true); //routing all a href elements in links (in templates) to the backbone router.
+                    }
+
+                    Backbone.history.navigate(href, true);
                 });
-                
-                  this.homeView = new HomeView();
-                  this.homeView.render();
-                  Backbone.history.start({
+
+                this.homeView = new HomeView();
+                this.homeView.render();
+                Backbone.history.start({
                     pushState: true
                 });
                 this.bindApplicationEvents();
@@ -55,17 +51,16 @@ define(['backbone',
                 "polls/:id/results": 'pollResults',
                 "mypolls": "showMyPolls",
                 "settings": "showSettings",
-                 '*notFound': 'notFound'
+                '*notFound': 'notFound'
 
             },
-            notFound: function(){
+            notFound: function() {
                 EventBus.trigger('home:displayView', new NotFoundView());
             },
             home: function() {
                 var user = app.getUser();
-                console.log(user);
                 EventBus.trigger('home:displayView', new DashboardView({
-                    model:user
+                    model: user
                 }));
             },
             showSignup: function() {
@@ -75,9 +70,6 @@ define(['backbone',
                 }));
             },
             showLogin: function() {
-                // var user = new User();
-                // console.log('the user here ');
-                // console.log(user);
                 EventBus.trigger('home:displayView', new LoginView());
             },
             logout: function() {
@@ -87,8 +79,8 @@ define(['backbone',
                     route: 'home',
                     options: {
                         trigger: true
-                }
-            });
+                    }
+                });
             },
             bindApplicationEvents: function() {
                 EventBus.on('router:navigate', this._navigate, this);
@@ -98,10 +90,8 @@ define(['backbone',
             },
             showPolls: function() {
                 var polls = new Polls();
-                //   var user = app.getUser();
                 polls.url = '/api/polls/';
-                //populate collection from server
-                polls.fetch() //fires a GET request to 'api/polls/' and fires a collection reset event
+                polls.fetch()
                     .done(function() {
                         EventBus.trigger('home:displayView', new PollsView({
                             collection: polls,
@@ -119,43 +109,42 @@ define(['backbone',
                 });
                 $('#content').html(this.addPollView.render().el);
             },
-            
-            pollDetails: function(slug) { //get request to polls/:id (link from the model)
+
+            pollDetails: function(slug) {
                 var self = this;
                 var poll = new Poll({
                     _id: slug
                 });
-                
-                //If the registered user has already voted in this poll, the user will not be
-                //able to vote again and will instead see the results of the poll
+
                 poll.fetch()
-                  .done(function() {
-                    if(app.getUser().attributes.registeredVotes.indexOf(poll.id) !==-1){
-                        self.pollResults(poll.id);
-                    }else{
-                        EventBus.trigger('home:displayView', new PollDetailsView({
-                            model: poll,
-                            user: app.getUser()
-                        }));
-                    }
-                })
+                    .done(function() {
+                        if (app.getUser().attributes.registeredVotes.indexOf(poll.id) !== -1) {
+                            self.pollResults(poll.id);
+                        }
+                        else {
+                            EventBus.trigger('home:displayView', new PollDetailsView({
+                                model: poll,
+                                user: app.getUser()
+                            }));
+                        }
+                    })
                     .fail(function(err) {
                         alert("Error fetching the poll");
                     });
             },
-            pollResults:function(id){
-                var poll= new Poll({
+            pollResults: function(id) {
+                var poll = new Poll({
                     _id: id
                 });
                 poll.fetch()
-                    .done(function(){
-                          EventBus.trigger('home:displayView', new ChartView({
-                               model: poll
-                            }));
+                    .done(function() {
+                        EventBus.trigger('home:displayView', new ChartView({
+                            model: poll
+                        }));
                     })
-                    .fail(function(err){
-                         alert("Error fetching the poll");
-                        
+                    .fail(function(err) {
+                        alert("Error fetching the poll");
+
                     });
             },
             showSettings: function() {
@@ -164,15 +153,16 @@ define(['backbone',
                     EventBus.trigger('home:displayView', new SettingsView({
                         model: user
                     }));
-                } else {
+                }
+                else {
                     EventBus.trigger('home:displayView', new LoginView());
                 }
             },
             showMyPolls: function() {
                 var user = app.getUser();
-                if (user.id) {//If the user is logged in/authenticated, his/her polls collection will get fetched.
+                if (user.id) {
                     //user.polls is a collection inside of the user model
-                    user.polls.fetch() //fires a GET request to 'api/users/:user_id/polls/' and fires a collection reset event
+                    user.polls.fetch()
                         .done(function() {
                             EventBus.trigger('home:displayView', new PollsView({
                                 collection: user.polls,
@@ -182,13 +172,12 @@ define(['backbone',
                         .fail(function(err) {
                             alert(err);
                         });
-
                 }
                 else {
                     EventBus.trigger('home:displayView', new LoginView());
                 }
             }
         });
-        
+
         return AppRouter;
     });

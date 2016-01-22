@@ -2,21 +2,6 @@ var mongoose = require("mongoose");
 var friendly = require('mongoose-friendly');
 var Schema = mongoose.Schema;
 
-//Poll Schema
-// var PollSchema = new Schema({
-//     name: String,
-//     option1: String,
-//     option2: String
-// });
-
-//  var PollSchema = new Schema({
-//      name: String,
-//      options: [{
-//          type: Schema.Types.ObjectId,
-//       ref: 'Option'
-//     }]
-//  });
-
 var PollSchema = new Schema({
     name: String,
     options: [{

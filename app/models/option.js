@@ -6,7 +6,6 @@ var OptionSchema = new Schema({
     votes: Number
 });
 
-//Compare the password with the encrypted password in the database 
 OptionSchema.methods.addVote = function() {
     var option= this;
     option.votes +=1;

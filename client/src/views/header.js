@@ -6,8 +6,7 @@ define(['jquery',
     'app'
 ], function($, _, HeaderTemplate, Backbone, EventBus, app) {
     var HeaderView = Backbone.View.extend({
-
-        el: '#header', //put the content into the header id in the Ahome.html template
+        el: '#header',
         template: _.template(HeaderTemplate),
         initialize: function() {
             this.bindPageEvents();
@@ -20,7 +19,6 @@ define(['jquery',
             this.render();
         },
         render: function() {
-            // this.$el.html(this.template);
             this.$el.html(this.template(this.model.toJSON()));
             return this;
         }

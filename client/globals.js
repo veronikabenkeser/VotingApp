@@ -4,7 +4,7 @@ define([], function() {
             TOKEN_KEY: 'authToken',
             USER_KEY: 'userId'
         },
-        extraInfo:{
+        extraInfo: {
             unsavedPoll: 'unsavedPoll'
         },
         urls: {

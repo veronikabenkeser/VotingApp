@@ -105,7 +105,6 @@ module.exports = {
             }
         }
         
-        
         if(voter){
              User.findById(voter, function(err, user){
             if (err) return res.status(400).json(err);

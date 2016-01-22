@@ -3,26 +3,19 @@ define(['jquery',
     'src/models/user',
     'text!src/templates/signup.html',
     'backbone',
-    // 'backbone-validation',
     'eventBus',
     'globals'
 ], function($, _, User, SignupTemplate, Backbone, EventBus, globals) {
     var SignupView = Backbone.View.extend({
-        // tagname:'div',
         el: "#content",
-        // className: 'signup-container',
         template: _.template(SignupTemplate),
         initialize: function() {
-            //TODO: implement validation after the user changes his password, etc.
-            //this.listenTo(this.model, 'change',this.validate0);
             this.listenTo(this.model, 'invalid', this.showErrors);
         },
         events: {
-
             'click .signup': 'registerUser',
             'change input': 'onInputChange',
             'keyup input': 'realTimeOnInputChange'
-
         },
         onInputChange: function(e) {
             var fieldName = e.target.id;
@@ -42,7 +35,6 @@ define(['jquery',
             var fieldName = e.target.id;
             if ($('#' + fieldName).parent().hasClass('error')) {
                 this.onInputChange(e);
-                // this.removeValidationErr(fieldName);
             }
         },
         showErrors: function(errors) {
@@ -62,9 +54,7 @@ define(['jquery',
         },
 
         render: function() {
-            //this.el is what we defined in tagName
             $(this.el).html(this.template(this.model.toJSON()));
-            //  this.$el.html( this.template( this.model.toJSON()) );
             return this;
         },
         registerUser: function(e) {
@@ -76,15 +66,10 @@ define(['jquery',
 
             });
 
+            self.model.save(null, {
 
-            //Save the new user and authenticate the user upon a successful save.
-            self.model.save(null, { //issues a post request to the link in user model.
-
-                wait: true, //don't update the client side model until the server side trip is successful
+                wait: true,
                 success: function(model) {
-                    //   self.render();
-
-                    //the server responds to the POST req with JSON representing the saved model
                     var dataObj = {
                         email: model.get('email'),
                         password: model.get('password')
@@ -102,13 +87,12 @@ define(['jquery',
 
                         })
                         .fail(function(response) {
-                              console.log(response);
+                            alert(response.message);
 
                         });
-
                 },
                 error: function(model, error) {
-                     $('.alert-warning').show();
+                    $('.alert-warning').show();
                 }
             });
         },

@@ -12,22 +12,23 @@ module.exports = function(app, express) {
         .get(function(req, res) {
             polls.getAllPolls(req, res);
         });
-        
+
     apiRouter.route('/polls/:poll_id')
         .get(function(req, res) {
             polls.getById(req, res);
         });
 
-apiRouter.route('/options/:option_id')
-        .get(function(req,res){
+    apiRouter.route('/options/:option_id')
+        .get(function(req, res) {
             Option.findById(req.params.option_id, function(err, option) {
-            // if (err) return res.send(err);
-            if (err) res.json({error: 'Option not found.'});
-            res.json(option);
+                if (err) res.json({
+                    error: 'Option not found.'
+                });
+                res.json(option);
 
+            });
         });
-});
-    
+
     apiRouter.route('/users')
         .post(function(req, res) {
             users.addUser(req, res);
@@ -35,21 +36,18 @@ apiRouter.route('/options/:option_id')
         .get(function(req, res) {
             users.getAllUsers(req, res);
         });
-        
-    apiRouter.route('/polls/:poll_id')
-        .put(function(req,res){
-            polls.modifyPoll(req,res)
-        });    
 
-    //Authenticating Users
+    apiRouter.route('/polls/:poll_id')
+        .put(function(req, res) {
+            polls.modifyPoll(req, res)
+        });
+
     apiRouter.post('/authenticate', function(req, res) {
-        //select the name,email, and password explicitly
         User.findOne({
             email: req.body.email
         }).select('name email password').exec(function(err, user) {
             if (err) throw err;
 
-            //no user with that email found
             if (!user) {
                 return res.status(400).json({
                     success: false,
@@ -57,7 +55,6 @@ apiRouter.route('/options/:option_id')
                 });
             }
             else {
-                //if email is found, check if the password matches
                 var validPassword = user.comparePassword(req.body.password);
                 if (!validPassword) {
                     return res.status(400).json({
@@ -66,15 +63,11 @@ apiRouter.route('/options/:option_id')
                     });
                 }
                 else {
-                    //Create a token
                     var token = jwt.sign({
-                        //payload - info we want to transmit back to the website every time the user visits
                         name: user.name,
                         email: user.email,
                         _id: user._id
-                            //The secret is the signature held by the server.
                     }, superSecret, {
-                        // expiresIn: 1440
                         expiresIn: 1440
                     });
 
@@ -89,24 +82,10 @@ apiRouter.route('/options/:option_id')
         })
     });
 
-    //Route middleware to verify a token
-    //Since the pathh is omitted here. the path is "/" by default. This middleware will
-    //be fired every time the user is at ../api..
-
     apiRouter.use(function(req, res, next) {
-        //Check POST params, url params, or header params for token
-        //URL parameters are what follows '?'' here:
-        //http://example.com/api/users?id=4&token=sdfa3&geo=us
-        //URL Parameters are grabbed using req.param.variable_name
-
-
-        //POSTparams are params from forms,which  pass information as application/x-www-form-urlencoded.
-        //POST Parameters are grabbed using req.body.variable_name
         var token = req.body.token || req.query.token || req.headers['x-access-token'];
 
-        //decode token
         if (token || !token) {
-            //verifies secret and checks token's expiration
             jwt.verify(token, superSecret, function(err, decoded) {
                 if (err) {
                     return res.status(403).send({
@@ -123,34 +102,30 @@ apiRouter.route('/options/:option_id')
             });
         }
         else {
-            //if there is no token
-            //return an HTTP response of 403 (access forbidden) and an error message
             return res.status(403).send({
                 success: false,
                 message: 'No token provided'
             });
         }
     });
-    
-    //View, update or delete an existing user account
+
     apiRouter.route('/users/:user_id')
         .get(function(req, res) {
             users.getById(req, res);
         })
-        .put(function(req,res){
-             users.changeSettings(req,res);
+        .put(function(req, res) {
+            users.changeSettings(req, res);
         })
-        .delete(function(req, res) { 
+        .delete(function(req, res) {
             users.deleteUser(req, res);
         });
 
-    //As an authenticated user, I can create a poll or delete one of my polls
     apiRouter.route('/users/:user_id/polls')
         .post(function(req, res) {
             users.addPoll(req, res);
         })
-        .get(function(req,res){
-            users.getAllPolls(req,res);
+        .get(function(req, res) {
+            users.getAllPolls(req, res);
         });
 
     apiRouter.route('/users/:user_id/polls/:poll_id')

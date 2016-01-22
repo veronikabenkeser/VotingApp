@@ -22,9 +22,6 @@ var UserSchema = new Schema({
         ref: 'Poll'
     }],
     registeredVotes: []
-
-    //     //By setting select to false , the password will not be returned when listing 
-    //our users, unless it is explicitly called.
 });
 
 UserSchema.pre('save', function(next) {
@@ -40,7 +37,6 @@ UserSchema.pre('save', function(next) {
     });
 });
 
-//Compare the password with the encrypted password in the database 
 UserSchema.methods.comparePassword = function(password) {
     var user = this;
     return bcrypt.compareSync(password, user.password);

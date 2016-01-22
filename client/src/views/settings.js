@@ -3,7 +3,6 @@ define(['jquery',
     'src/models/user',
     'text!src/templates/settings.html',
     'backbone',
-    // 'backbone-validation',
     'eventBus',
     'app'
 ], function($, _, User, SettingsTemplate, Backbone, EventBus, app) {
@@ -14,15 +13,11 @@ define(['jquery',
             this.on('invalid', this.showErrors);
         },
         events: {
-
             'click .save': 'saveChanges',
             'change input': 'onInputChange',
             'keyup input': 'onInputChange'
-
         },
-
         render: function() {
-            //this.el is what we defined in tagName
             $(this.el).html(this.template);
             return this;
         },
@@ -32,36 +27,28 @@ define(['jquery',
 
             if (app.getUser().id) {
                 var formValues = {
-                    // id: app.getUser().id,
                     oldPassword: $('#oldPassword').val(),
                     newPassword: $('#newPassword').val()
                 };
-
                 var errors = this.validate(formValues);
                 if (!errors) {
                     this.saveNewPassword(formValues);
 
                 }
-                else {
-                    console.log("ERRORS FOUND");
-                }
             }
         },
         saveNewPassword: function(formValues) {
             $.ajax({
-                    // url: '/api/users/' + formValues.id,
-                    url: '/api/users/'+app.getUser().id,
+                    url: '/api/users/' + app.getUser().id,
                     type: 'PUT',
                     dataType: "json",
                     data: formValues
                 })
                 .done(function(response) {
                     EventBus.trigger("app:goHome");
-                    console.log('password changed');
                 })
                 .fail(function(response) {
                     $('.alert-warning').show();
-                    console.log("error - password not changed");
                 });
         },
         validate: function(attrs) {
@@ -73,7 +60,6 @@ define(['jquery',
 
                 if (!attrs.oldPassword) {
                     errors.oldPassword = 'Your old password is required.';
-                    console.log('Password isEmpty validation called');
                 }
             }
 
@@ -81,10 +67,8 @@ define(['jquery',
 
                 if (!attrs.newPassword) {
                     errors.newPassword = 'Your new password is required.';
-                    console.log('Password isEmpty validation called');
                 }
                 else if (!User.prototype.validators.minLength(attrs.newPassword, 6)) {
-                    console.log('password is too short');
                     errors.newPassword = 'Your new password is too short';
                 }
             }
