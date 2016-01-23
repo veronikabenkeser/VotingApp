@@ -1,3 +1,2 @@
 MONGOLAB_URI= fake_MongoDB_uri
 SECRET = fake_secret
-TEST_DB = fake_test_MongoDB_uri

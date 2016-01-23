@@ -29,7 +29,6 @@ describe('app routes', function() {
         done();
     });
 
-
     describe('Request to the root path', function() {
 
         it('Returns a 200 status code', function(done) {
@@ -94,6 +93,7 @@ describe('app routes', function() {
                     password: '123'
                 })
                 .end(function(err, res) {
+                    expect(res.status).to.equal(200);
                     token = res.body.token;
                     id = res.body._id;
                     done();
@@ -110,8 +110,6 @@ describe('app routes', function() {
                     newPassword: '321'
                 })
                 .end(function(err, res) {
-
-                    // expect(res.body.name).to.equal('user1');
                     expect(res.status).to.equal(200);
                     done();
                 });
