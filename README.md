@@ -11,3 +11,6 @@ This project was built as a part of Free Code Camp's Full-Stack Development curr
 7. As an unauthenticated or authenticated user, I can see the results of polls in chart form.
 8. As an authenticated user, if I don't like the options on a poll, I can create a new option.
 9. If a registered user has already voted in a poll, he/she will not be able to vote in that poll again and will instead see the results of the poll.
+
+<h2>Try it:</h2>
+http://my-polling-app.herokuapp.com/
